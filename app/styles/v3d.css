@@ -1,0 +1,185 @@
+/* ТЕСТ: витрина витаминов с 3D-банками. Стиль проекта: чёрный, оранжевый, Compacta, косые плоскости. */
+.v3 {
+  --glow: 255 138 0;
+  position: relative; overflow: hidden; background: var(--ink); color: var(--paper);
+  /* на фоне — мягкое пятно цвета банки и чуть заметная фирменная косая плоскость */
+  background-image: linear-gradient(102deg, transparent 0 58%, rgb(255 255 255 / 0.025) 58% 74%, transparent 74%);
+}
+/* свечение цвета банки — отдельные слои, сменяются плавной прозрачностью */
+.v3__glows { position: absolute; inset: 0; pointer-events: none; transition: transform 0.7s var(--ease-out), opacity 0.7s; }
+.v3__glow { position: absolute; inset: 0; background: radial-gradient(60% 55% at 50% 46%, rgb(var(--glow) / 0.22), transparent 70%); opacity: 0; transition: opacity 0.9s ease; }
+.v3__glow.is-on { opacity: 1; }
+.v3.is-video .v3__glows { opacity: 0.3; }
+.v3__stage { position: relative; height: calc(100vh - 76px); height: calc(100svh - 76px); min-height: 700px; max-height: 1100px; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.v3__scene { position: absolute; inset: 0; transition: transform 0.7s var(--ease-out), filter 0.7s var(--ease-out); transform-origin: 60% 50%; }
+.v3.is-video .v3__scene { transform: translateX(-7%) scale(0.92); filter: brightness(0.32) saturate(0.7) blur(2px); }
+
+/* строка над словами */
+.v3__top { position: absolute; left: 0; right: 0; top: 4.5%; margin: 0; z-index: 3; text-align: center; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #bdbdb6; }
+.v3__stars { color: var(--orange); letter-spacing: 0.12em; font-size: 0.875rem; margin-right: 10px; }
+
+/* огромные слова за банкой */
+.v3__words {
+  position: absolute; left: 0; right: 0; top: 43%; transform: translateY(-50%); margin: 0; z-index: 1;
+  display: grid; justify-items: center; pointer-events: none;
+  font-family: 'Compacta BT CYR', 'Jana KZ Letters', var(--brand); font-weight: 400; font-synthesis: none;
+  font-size: min(clamp(6rem, 1rem + 17.5vw, 20rem), 29vh); font-size: min(clamp(6rem, 1rem + 17.5vw, 20rem), 29svh); line-height: 0.82; letter-spacing: 0.01em; color: #ecebe3;
+}
+/* старые и новые слова лежат в одной клетке: старые уезжают вверх, новые выезжают снизу */
+.v3__set { grid-area: 1 / 1; display: grid; justify-items: center; position: relative; }
+/* строка обрезает буквы только при выезде; запас сверху и снизу — под верх заглавных и хвосты Ц Д Щ (и Й Ё) */
+.v3__line { display: block; overflow: hidden; padding: 0.2em 0.06em 0.13em; margin: -0.2em 0 -0.13em; }
+.v3__ch { display: inline-block; animation: v3-in 0.75s var(--ease-out) calc(var(--d, 0ms) + var(--wait, 0ms)) both; will-change: transform; }
+/* при смене новые буквы ждут, пока старые уедут */
+.v3__words.is-swapping .v3__set:not(.is-out) { --wait: 330ms; }
+.v3__set.is-out .v3__ch { animation: v3-out 0.36s cubic-bezier(0.55, 0, 0.8, 0.25) calc(var(--d, 0ms) * 0.6) forwards; }
+@keyframes v3-in { from { transform: translateY(135%); } to { transform: none; } }
+@keyframes v3-out { from { transform: none; } to { transform: translateY(-140%); } }
+
+/* кольцо «от руки» — привязано к словам: стоит над правым концом верхнего слова и чуть выходит вправо,
+   поэтому оранжевая надпись всегда на тёмном фоне, а не поверх белых букв (bottom в em — от размера слов) */
+.v3__ring {
+  --rw: clamp(130px, 11vw, 190px);
+  position: absolute; z-index: 3; left: calc(100% - var(--rw) * 0.32); bottom: calc(100% + 0.05em); width: var(--rw); aspect-ratio: 200 / 110;
+  display: grid; place-items: center; transform: rotate(-9deg); transform-origin: 30% 100%; pointer-events: none; transition: opacity 0.3s, transform 0.3s;
+}
+.v3__ring svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.v3__ring path { fill: none; stroke: var(--orange); stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: v3-draw 0.9s 0.35s var(--ease-out) forwards; }
+.v3__ring span { position: relative; font-family: var(--display); font-weight: 800; font-size: clamp(0.875rem, 0.6rem + 0.5vw, 1.125rem); line-height: 1; color: var(--orange); text-transform: uppercase; letter-spacing: 0.02em; opacity: 0; animation: v3-fade 0.4s 0.75s both; white-space: nowrap; }
+.v3__set.is-out .v3__ring { opacity: 0; transform: rotate(-9deg) scale(0.9); }
+/* при смене кольцо рисуется, когда новые слова уже выехали */
+.v3__words.is-swapping .v3__set:not(.is-out) .v3__ring path { animation-delay: 0.6s; }
+.v3__words.is-swapping .v3__set:not(.is-out) .v3__ring span { animation-delay: 1s; }
+@keyframes v3-draw { to { stroke-dashoffset: 0; } }
+@keyframes v3-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* 3D поверх слов */
+.v3__canvas { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 0.8s; }
+.v3.is-ready .v3__canvas { opacity: 1; }
+.v3__canvas canvas { display: block; width: 100% !important; height: 100% !important; }
+
+/* описание стоит над нижней панелью (от низа), чтобы на невысоком экране не наезжать на мини-банки */
+.v3__lead { position: absolute; left: 0; right: 0; bottom: calc(4.5% + 118px); z-index: 3; margin: 0 auto; width: min(440px, calc(100% - 40px)); text-align: center; font-size: 0.9375rem; line-height: 1.5; color: #c9c9c2; animation: v3-fade 0.55s 0.3s both; }
+.v3__lead.is-out { animation: v3-gone 0.3s forwards; }
+@keyframes v3-gone { to { opacity: 0; transform: translateY(-6px); } }
+
+/* низ: кнопка · выбор банки · ролик */
+.v3__bar { position: absolute; left: 0; right: 0; bottom: 4.5%; z-index: 4; display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 20px; padding: 0 clamp(20px, 5vw, 96px); }
+.v3__buy { display: flex; align-items: center; gap: 18px; justify-self: start; }
+.v3__note { display: grid; font-size: 0.8125rem; color: #bdbdb6; line-height: 1.3; }
+.v3__note b { font-family: var(--display); font-weight: 900; font-size: 1.125rem; color: var(--paper); text-transform: uppercase; box-shadow: inset 0 -3px 0 var(--orange); justify-self: start; }
+
+.v3__pick { display: grid; justify-items: center; gap: 8px; }
+.v3__thumbs { display: flex; align-items: flex-end; gap: 14px; }
+.v3__thumb { position: relative; display: grid; place-items: end center; width: 58px; height: 66px; padding: 0; border: 0; background: none; cursor: pointer; opacity: 0.55; transition: opacity 0.2s, transform 0.3s var(--ease-out); }
+.v3__thumb:hover { opacity: 0.9; transform: translateY(-3px); }
+.v3__thumb.is-on { opacity: 1; transform: translateY(-4px) scale(1.12); }
+.v3__thumb.is-on::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: -8px; height: 3px; background: var(--orange); }
+.v3__thumb:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+.v3__mini { height: 58px; }
+.v3__names { display: grid; }
+.v3__names > * { grid-area: 1 / 1; justify-self: center; }
+.v3__name.is-out { animation: v3-gone 0.25s forwards; }
+.v3__name { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #bdbdb6; animation: v3-fade 0.4s both; white-space: nowrap; }
+
+.v3__video { justify-self: end; display: grid; justify-items: center; gap: 8px; }
+.v3__vcard {
+  /* пропорции как у плеера (16:9) — при раскрытии картинка просто растёт, без растяжения */
+  position: relative; display: block; width: clamp(170px, 15vw, 250px); aspect-ratio: 16 / 9; padding: 0; border: 0; cursor: pointer; overflow: hidden;
+  background: var(--orange); clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+}
+.v3__vcard:focus-visible { outline: 3px solid var(--paper); outline-offset: 3px; }
+.v3__vcard.is-hidden { opacity: 0; }
+/* кнопка «плей» у карточки появляется мягко, когда плеер вернулся на место */
+.v3__vcard.is-hidden .v3__play { opacity: 0; transform: scale(0.6); transition: none; }
+/* кадр из ролика: один и тот же у карточки и у плеера, поэтому при раскрытии и закрытии картинка не меняется */
+.v3__still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.v3__vcard .v3__play { z-index: 1; }
+.v3__vcard::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgb(0 0 0 / 0.35)); pointer-events: none; }
+.v3__len { position: absolute; right: 16px; bottom: 7px; z-index: 1; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.04em; color: var(--paper); text-shadow: 0 1px 3px rgb(0 0 0 / 0.6); }
+.v3__play { position: absolute; left: 50%; top: 50%; width: 48px; height: 40px; margin: -20px 0 0 -24px; display: grid; place-items: center; background: var(--ink); color: var(--orange); clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); transition: transform 0.35s var(--ease-out), opacity 0.3s; }
+.v3__vcard:hover .v3__play { transform: scale(1.1); }
+.v3__play .i { width: 20px; height: 20px; margin-left: 2px; }
+.v3__vcap { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #bdbdb6; }
+
+.v3__arrow { position: absolute; top: 47%; z-index: 4; width: 52px; height: 60px; margin-top: -30px; display: grid; place-items: center; border: 0; background: rgb(255 255 255 / 0.06); color: var(--paper); cursor: pointer; clip-path: polygon(9px 0, 100% 0, calc(100% - 9px) 100%, 0 100%); transition: background-color 0.2s, color 0.2s; }
+.v3__arrow:hover { background: var(--orange); color: var(--ink); }
+.v3__arrow .i { width: 24px; height: 24px; }
+.v3__arrow--prev { left: clamp(12px, 3vw, 48px); }
+.v3__arrow--next { right: clamp(12px, 3vw, 48px); }
+
+/* ролик поверх страницы: раскрывается из карточки */
+.v3v { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 24px; }
+.v3v__dim { position: absolute; inset: 0; background: rgb(0 0 0 / 0.55); opacity: 0; transition: opacity 0.7s var(--ease-out); }
+.v3v.is-open .v3v__dim { opacity: 1; }
+.v3v__box { position: relative; width: min(1120px, 100%, calc((100vh - 48px) * 16 / 9)); aspect-ratio: 16 / 9; transform-origin: 0 0; transition: transform 0.7s var(--ease-out); }
+.v3v__clip {
+  position: absolute; inset: 0; overflow: hidden; background: var(--orange);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transition: clip-path 0.7s var(--ease-out);
+}
+.v3v__shadow { position: absolute; inset: 8% 4% -3%; background: #000; filter: blur(48px); opacity: 0; transition: opacity 0.7s var(--ease-out); }
+.v3v.is-open .v3v__shadow { opacity: 0.6; }
+/* плеер платформы поверх кадра: само видео проявляется, когда пошли кадры, и уходит обратно в кадр при закрытии */
+.v3v__vp { position: absolute; inset: 0; aspect-ratio: auto; background: transparent; }
+.v3v__vp video { background: transparent; opacity: 0; transition: opacity 0.22s ease; }
+.v3v.is-open .v3v__vp video { transition-duration: 0.35s; }
+.v3v__vp.is-live video { opacity: 1; }
+/* панель управления и кнопка — только когда окно уже раскрылось (во время роста и закрытия их нет) */
+.v3v__vp .vp__bar, .v3v__vp .vp__big { transition: opacity 0.3s; }
+.v3v__vp:not(.is-settled) .vp__bar, .v3v__vp:not(.is-settled) .vp__big, .v3v__vp:not(.is-settled) .vp__spin { opacity: 0; pointer-events: none; }
+.v3v__x { position: absolute; z-index: 4; top: 14px; right: 14px; width: 48px; height: 48px; display: grid; place-items: center; border: 0; background: var(--ink); color: var(--paper); cursor: pointer; clip-path: polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%); opacity: 0; transition: opacity 0.3s, background-color 0.2s; }
+.v3v.is-open .v3v__x { opacity: 1; transition-delay: 0.35s; }
+.v3v__x:hover { background: var(--paper); color: var(--ink); }
+.v3v__x .i { width: 22px; height: 22px; }
+
+@media (max-width: 900px) {
+  .v3__stage { height: calc(100svh - 64px); min-height: 720px; }
+  .v3__top { top: 2.5%; }
+  .v3__words { top: 33%; font-size: clamp(5rem, 34vw, 12rem); }
+  /* на телефоне справа места нет — кольцо над концом слова, внутри экрана */
+  .v3__ring { --rw: 138px; left: auto; right: -4px; transform-origin: 70% 100%; }
+  .v3__lead { bottom: calc(3% + 232px); font-size: 0.875rem; width: min(340px, calc(100% - 32px)); }
+  .v3__arrow { display: none; }
+  .v3__bar { grid-template-columns: 1fr auto; grid-template-areas: "pick pick" "buy video"; row-gap: 18px; bottom: 3%; padding: 0 16px; }
+  .v3__pick { grid-area: pick; }
+  .v3__buy { grid-area: buy; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .v3__buy .btn { min-height: 54px; }
+  .v3__video { grid-area: video; }
+  .v3__vcard { width: 132px; }
+  .v3__vcap { font-size: 0.6875rem; }
+  .v3v { padding: 12px; }
+  .v3v__x { top: 8px; right: 8px; width: 42px; height: 42px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v3__ch, .v3__set.is-out .v3__ch, .v3__lead, .v3__name, .v3__ring span { animation: none; }
+  .v3__set.is-out, .v3__lead.is-out, .v3__name.is-out { display: none; }
+  .v3__ring path { animation: none; stroke-dashoffset: 0; }
+}
+
+/* на тестовой странице кнопка «Спросить Айтыма» закрывала бы ролик — прячем */
+body:has(.v3) .guide-fab { display: none; }
+
+/* ===== под 3D-витриной: каталог, как на нынешней странице /vitamins (карточки — общие стили .vcard из rating.css) ===== */
+.v3page { overflow-x: clip; }
+.v3__edge { --h: clamp(28px, 4vw, 56px); height: var(--h); margin-bottom: calc(-1 * var(--h)); background: var(--ink); clip-path: polygon(0 0, 100% 0, 0 100%); }
+.v3cat { position: relative; padding-top: calc(clamp(40px, 6vw, 72px) + 12px); }
+.v3cat__title { margin: 8px 0 22px; }
+.v3cat .vcard { transition: border-color 0.25s, box-shadow 0.25s var(--ease-out), transform 0.25s var(--ease-out); }
+/* банка, которая сейчас наверху в 3D, отмечена оранжевым */
+.v3cat .vcard.is-current { border-color: var(--orange); box-shadow: 8px 8px 0 var(--orange); }
+.v3cat__3d {
+  position: absolute; left: 14px; top: 14px; z-index: 2; display: inline-flex; align-items: center; gap: 8px;
+  min-height: 38px; padding: 0 16px; border: 0; background: var(--ink); color: var(--paper); cursor: pointer;
+  font: inherit; font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+  clip-path: polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%); transition: background-color 0.2s, color 0.2s;
+}
+.v3cat__3d .i { width: 16px; height: 16px; color: var(--orange); transition: color 0.2s; }
+.v3cat__3d:hover { background: var(--orange); color: var(--ink); }
+.v3cat__3d:hover .i { color: var(--ink); }
+.v3cat__3d:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+@media (hover: hover) {
+  .v3cat .vcard:hover { transform: translateY(-4px); }
+  .v3cat .vcard:hover .vcard__jar { transform: translateY(-6px) rotate(-2deg); }
+}
+.v3cat .vcard__jar { transition: transform 0.4s var(--ease-out); }
+@media (prefers-reduced-motion: reduce) { .v3cat .vcard, .v3cat .vcard__jar { transition: none; } .v3cat .vcard:hover, .v3cat .vcard:hover .vcard__jar { transform: none; } }

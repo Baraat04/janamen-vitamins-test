@@ -1,0 +1,93 @@
+/* Команда → «Рейтинг»: видео рейтинга на сайте, загрузка нового, порядок карточек участников */
+.trate { padding-bottom: 72px; }
+.trate__lead { margin: 8px 0 0; color: var(--muted); max-width: 72ch; }
+.trate__grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-areas: "now order" "up order"; gap: 18px; align-items: start; }
+.trate__now { grid-area: now; }
+.trate__up { grid-area: up; }
+.trate__order { grid-area: order; position: sticky; top: 16px; }
+
+.tcard { display: grid; gap: 14px; padding: 22px 24px 24px; background: var(--paper); box-shadow: 0 0 0 1px var(--concrete-2); border-top: 5px solid var(--orange); }
+.tcard__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.tcard__head .h3 { margin: 0; }
+.tag--ok { background: #e2f3e6; color: #1b6b34; }
+
+.trate__player { display: block; width: 100%; aspect-ratio: 1600 / 812; background: var(--ink); object-fit: contain; }
+.trate__meta { margin: 0; display: grid; gap: 6px; font-size: 0.9375rem; }
+.trate__meta div { display: flex; gap: 10px; flex-wrap: wrap; }
+.trate__meta dt { color: var(--muted); min-width: 120px; }
+.trate__meta dd { margin: 0; font-weight: 600; }
+.trate__file { overflow-wrap: anywhere; }
+.trate__now .qbtn { justify-self: start; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+
+.trate__drop { cursor: pointer; }
+.trate__pick { display: grid; gap: 14px; }
+.trate__pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.trate__pair figure { margin: 0; display: grid; gap: 6px; align-content: start; }
+.trate__pair video, .trate__pair img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: contain; background: var(--ink); }
+.trate__pair figcaption { font-size: 0.8125rem; color: var(--muted); line-height: 1.35; }
+.trate__name { margin: 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 14px; background: var(--concrete); font-size: 0.9375rem; }
+.trate__name b { overflow-wrap: anywhere; }
+.trate__name span { color: var(--muted); margin-left: auto; }
+.trate__date { max-width: 360px; }
+.trate__bar { position: relative; height: 44px; background: var(--concrete); overflow: hidden; display: grid; place-items: center; }
+.trate__bar span { position: absolute; inset: 0 auto 0 0; background: var(--orange); transition: width 0.25s linear; }
+.trate__bar b { position: relative; font-size: 0.9375rem; }
+.trate__acts { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.trate__acts .qbtn { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.trate__err { margin: 0; }
+
+.trate__order .hint { margin: 0; }
+.trate__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-height: min(62vh, 760px); overflow: auto; overscroll-behavior: contain; }
+.trate__list li { display: grid; grid-template-columns: 30px 30px 40px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 6px 8px 6px 4px; background: var(--concrete); transition: box-shadow 0.15s, transform 0.15s, background-color 0.15s; }
+/* ручка: только за неё можно тянуть — поэтому список и страница листаются пальцем как обычно */
+.trate__grip { width: 30px; height: 40px; display: grid; place-items: center; border: 0; background: none; color: #8a8a83; cursor: grab; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.trate__grip:hover { color: var(--ink); }
+.trate__grip:focus-visible { outline: 3px solid var(--orange); outline-offset: -3px; }
+.trate__list.is-drag li { cursor: grabbing; }
+.trate__list.is-drag .trate__grip { cursor: grabbing; }
+.trate__list li.is-moving { position: relative; z-index: 2; background: var(--paper); box-shadow: 0 0 0 2px var(--orange), 0 14px 26px -14px rgb(17 17 17 / 0.55); transform: scale(1.015); }
+.trate__list li.is-moving .trate__grip { color: var(--orange-press); }
+html.is-dragging, html.is-dragging * { -webkit-user-select: none !important; user-select: none !important; }
+.trate__n { font-family: var(--display); font-weight: 900; font-size: 1.125rem; text-align: center; }
+.trate__list li:nth-child(-n + 3) .trate__n { color: var(--orange-press); }
+.trate__ph { width: 40px; height: 40px; }
+.trate__ph .pphoto__ini { font-size: 0.8125rem; color: var(--paper); font-weight: 800; }
+.trate__list b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trate__mv { display: inline-flex; gap: 4px; }
+.trate__mv button { width: 38px; height: 38px; display: grid; place-items: center; border: 0; background: var(--paper); cursor: pointer; }
+.trate__mv button:hover:not(:disabled) { background: var(--ink); color: var(--orange); }
+.trate__mv button:disabled { opacity: 0.35; cursor: default; }
+.trate__mv .is-up { transform: rotate(180deg); }
+
+@media (max-width: 1000px) {
+  .trate__grid { grid-template-columns: 1fr; grid-template-areas: "now" "up" "order"; }
+  .trate__order { position: static; }
+  .trate__list { max-height: none; overflow: visible; overscroll-behavior: auto; }
+}
+@media (max-width: 560px) {
+  .tcard { padding: 18px 16px 20px; }
+  .trate__list li { grid-template-columns: 30px 24px 36px minmax(0, 1fr) auto; gap: 8px; }
+  .trate__ph { width: 36px; height: 36px; }
+  .trate__mv button { width: 36px; height: 36px; }
+  .trate__pair { grid-template-columns: 1fr; }
+  .trate__acts .btn { width: 100%; }
+}
+
+/* Шапка команды у супер-админа — 6 разделов (с «Рейтингом», «Командой» и «Партнёрами»): на узком компьютере без иконок,
+   а ниже 1100px разделы уходят в «Меню», чтобы шапка не вылезала за край. У модератора разделов меньше — его не трогаем. */
+@media (max-width: 1400px) {
+  .tnav:has(> a:nth-child(6)) { gap: 4px; }
+  .tnav:has(> a:nth-child(6)) a { padding: 0 15px; white-space: nowrap; }
+  .tnav:has(> a:nth-child(6)) a .i { display: none; }
+}
+@media (max-width: 1100px) {
+  .tbar__in:has(.tnav > a:nth-child(6)) .tnav { display: none; }
+  .tbar__in:has(.tnav > a:nth-child(6)) .tburger { display: inline-flex; }
+  .tbar__in:has(.tnav > a:nth-child(6)) .tbar__title { display: block; margin-right: auto; }
+}
+/* по-казахски названия разделов длиннее — «Меню» чуть раньше */
+@media (max-width: 1180px) {
+  :lang(kk) .tbar__in:has(.tnav > a:nth-child(6)) .tnav { display: none; }
+  :lang(kk) .tbar__in:has(.tnav > a:nth-child(6)) .tburger { display: inline-flex; }
+  :lang(kk) .tbar__in:has(.tnav > a:nth-child(6)) .tbar__title { display: block; margin-right: auto; }
+}

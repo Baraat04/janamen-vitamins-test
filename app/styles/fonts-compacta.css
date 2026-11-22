@@ -1,0 +1,42 @@
+/* Compacta BT CYR — шрифт крупных заголовков и крупных цифр, как в ролике взвешивания.
+   Кнопки, меню, подписи и текст остаются на Onest: узкий Compacta в мелком размере читается плохо.
+   Файл Compacta — оригинальный, без изменений. Казахских Ә Ғ Қ Ң Ө Ұ Ү Һ (и ₸) в нём нет — их браузер берёт
+   из отдельного маленького шрифта «Jana KZ Letters», где эти буквы собраны по деталям Compacta
+   (Ң Қ — хвост как у Ц, Ғ Ө Ұ — перекладина как у Н/Э, Ә — Ө с вырезом, Ү — как Y, Һ — повёрнутая Ч).
+   Пересобрать файлы: tools/fonts/compacta-kz-build.py и compacta-kz-split.py (нужен Python + fonttools, skia-pathops, brotli). */
+@font-face {
+  font-family: 'Compacta BT CYR';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/CompactaBT-CYR-Roman.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Jana KZ Letters';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/jana-kz-letters.woff2) format('woff2');
+  unicode-range: U+0492-0493, U+049A-049B, U+04A2-04A3, U+04AE-04B1, U+04BA-04BB, U+04D8-04D9, U+04E8-04E9, U+20B8;
+}
+
+/* крупные заголовки — на всех языках; шрифт узкий, поэтому крупнее, чтобы строка по ширине была как раньше.
+   :root в селекторе — чтобы перебить казахские правила разрядки для Onest */
+:root :is(.display, .h1, .h2) {
+  font-family: 'Compacta BT CYR', 'Jana KZ Letters', var(--brand);
+  font-weight: 400; font-synthesis: none; font-variation-settings: normal;
+  letter-spacing: 0.01em; line-height: 0.98;
+}
+/* казахский: хвосты Қ Ң Ғ и значки над Й Ә Ө не должны касаться соседней строки */
+:root:lang(kk) :is(.display, .h1, .h2) { line-height: 1.06; }
+:root .display { font-size: calc(var(--step-5) * 1.3); }
+:root .h1 { font-size: calc(var(--step-4) * 1.3); }
+:root .h2 { font-size: calc(var(--step-3) * 1.3); }
+:root .hero__copy .display { font-size: clamp(3.6rem, 1.3rem + 6.8vw, 7.8rem); }
+:root .rhero .display { font-size: clamp(3.25rem, 1.6rem + 6.5vw, 7.2rem); }
+
+/* крупные цифры (статистика о программе) */
+:root .pg-stats dt {
+  font-family: 'Compacta BT CYR', 'Jana KZ Letters', var(--brand);
+  font-weight: 400; font-synthesis: none; font-size: clamp(2.6rem, 1.6rem + 2.9vw, 4.2rem);
+}

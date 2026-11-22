@@ -1,0 +1,177 @@
+/* ===== Лента всех заявок (главный админ): одна страница для телефона и компьютера =====
+   Фон ленты тёмный, каждая заявка — отдельный белый лист с зазором вокруг. Снизу выглядывает край следующего листа:
+   видно, где карточка кончилась и что дальше есть ещё. */
+.afeed { height: 100dvh; display: grid; grid-template-rows: auto auto minmax(0, 1fr); background: var(--ink); overflow: hidden; }
+
+/* шапка — общая шапка команды (TeamBar). Под ней ряд: «Назад в очередь» (компьютер) или «Список» (телефон) и фильтры */
+.afeed > .tbar { position: relative; }
+.af-back, .af-listbtn { flex: none; display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 18px 0 14px; border: 0; background: var(--paper); color: var(--ink); font: inherit; font-weight: 700; font-size: 0.9375rem; text-decoration: none; cursor: pointer; clip-path: polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%); }
+.af-back:hover, .af-listbtn:hover { background: var(--orange); }
+.af-back .i, .af-listbtn .i { width: 1.15em; height: 1.15em; }
+.af-back { display: none; margin-right: 10px; }
+.af-listbtn { background: var(--orange); margin-right: 4px; }
+.af-listbtn:hover { background: var(--orange-press); }
+
+.af-chips { display: flex; align-items: center; gap: 8px; padding: 2px 16px 12px; overflow-x: auto; scrollbar-width: none; background: var(--ink); }
+.af-chips::-webkit-scrollbar { display: none; }
+.af-chip { flex: none; display: inline-flex; align-items: center; gap: 7px; min-height: 42px; padding: 0 16px; border: 0; background: var(--ink-2); color: var(--paper); font: inherit; font-weight: 600; font-size: 0.9375rem; cursor: pointer; clip-path: polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%); }
+.af-chip:hover { background: var(--ink-3); }
+.af-chip[aria-pressed="true"] { background: var(--paper); color: var(--ink); }
+.af-chip .n { font-variant-numeric: tabular-nums; font-size: 0.8125rem; opacity: 0.7; }
+.af-chip--new, .af-chip--new:hover { background: var(--orange); color: var(--ink); margin-left: auto; }
+.af-chip .i { width: 1em; height: 1em; }
+
+.af-body { min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr); }
+.af-main { min-height: 0; min-width: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; }
+.af-feed { --gap: 8px; --peek: 14px; position: relative; overflow-y: auto; scroll-snap-type: y mandatory; scroll-padding-top: var(--gap); overscroll-behavior: contain; scrollbar-width: none; outline: none; padding: var(--gap) 10px 0; background: var(--ink); }
+.af-feed::-webkit-scrollbar { display: none; }
+.af-feed::after { content: ""; display: block; height: var(--peek); } /* последняя карточка тоже встаёт под шапку */
+
+.af-card { height: calc(100% - var(--gap) - var(--peek)); margin-bottom: var(--gap); scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; background: var(--paper); color: var(--ink); overflow: hidden; cursor: pointer; }
+.af-card--empty { justify-content: center; gap: 10px; padding: 24px; text-align: center; cursor: default; }
+.af-head { flex: none; display: flex; align-items: stretch; min-width: 0; padding: 14px 14px 12px; }
+.af-head .slab { flex: none; width: 84px; padding: 8px 6px; --cut: 11px; }
+.af-head .slab b { font-size: 2rem; }
+.af-head .slab span { font-size: 0.6875rem; }
+.af-id { padding: 0 0 0 14px; min-width: 0; }
+.af-id h2 { margin: 0; font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: 1.375rem; line-height: 1.05; }
+.af-id h2 a { color: inherit; text-decoration: none; }
+.af-id p { margin: 4px 0 6px; font-size: 0.8125rem; color: var(--muted); }
+.af-id .tag { font-size: 0.75rem; }
+.af-rank { margin-left: auto; padding-left: 8px; font-size: 0.75rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* на низком экране видео ужимается первым: под текст всегда остаётся место */
+.af-media { flex: 0 1 auto; min-height: 96px; position: relative; aspect-ratio: 16 / 9; max-height: 30dvh; margin: 0 14px; background: var(--ink); color: var(--paper); display: grid; place-items: center; overflow: hidden; }
+.af-media::before { content: ""; position: absolute; top: 0; bottom: 0; left: 46%; right: -10%; background: var(--ink-2); clip-path: polygon(20% 0, 100% 0, 100% 100%, 0 100%); }
+.af-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; cursor: default; }
+.af-media .player__play { position: relative; width: 76px; height: 58px; cursor: pointer; }
+.af-media .player__play .i { width: 26px; height: 26px; }
+.af-media small { position: absolute; left: 12px; bottom: 10px; display: flex; gap: 6px; align-items: center; font-size: 0.75rem; color: var(--muted-on-ink); font-variant-numeric: tabular-nums; }
+.af-media small .i { width: 1em; height: 1em; }
+/* видео нет — вместо чёрного экрана узкая строка, место уходит под текст */
+.af-media--none { flex: none; aspect-ratio: auto; min-height: 40px; place-items: center start; padding: 0 12px; background: var(--concrete); color: var(--muted); }
+.af-media--none::before { display: none; }
+.af-media--none small { position: static; color: var(--muted); font-size: 0.8125rem; font-weight: 600; }
+
+/* текст листается внутри карточки; низ плавно уходит, чтобы строка не обрывалась посередине */
+.af-info { flex: 1 1 0; min-height: 104px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding: 14px 14px 26px; scrollbar-width: thin; -webkit-mask: linear-gradient(to bottom, #000 calc(100% - 26px), transparent); mask: linear-gradient(to bottom, #000 calc(100% - 26px), transparent); }
+.af-recap h3 { display: flex; align-items: center; gap: 6px; margin: 0 0 4px; font-family: var(--text); font-style: normal; font-size: 0.75rem; font-weight: 700; color: var(--muted); }
+.af-recap h3 .i { width: 1.1em; height: 1.1em; color: var(--orange); }
+.af-recap p { margin: 0; font-size: 1rem; line-height: 1.5; text-wrap: pretty; }
+.af-recap p.is-clamp { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+.af-link { align-self: flex-start; border: 0; background: none; padding: 6px 0; font: inherit; font-size: 0.875rem; font-weight: 700; color: var(--ink); text-decoration: underline; text-decoration-color: var(--orange); text-decoration-thickness: 2px; text-underline-offset: 4px; cursor: pointer; }
+.af-ch { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 2px; }
+.af-ch li { display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 10px; align-items: start; padding: 8px 10px; background: var(--concrete); font-size: 0.9375rem; line-height: 1.4; }
+.af-ch b { display: block; }
+.af-ch span { color: var(--ink-3); }
+.af-tc { border: 0; background: var(--ink); color: var(--paper); font: inherit; font-size: 0.75rem; font-weight: 700; padding: 4px 6px; cursor: pointer; font-variant-numeric: tabular-nums; clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%); }
+.af-tc:hover:not([disabled]) { background: var(--orange); color: var(--ink); }
+.af-tc[disabled] { background: var(--concrete-3); color: var(--ink); cursor: default; }
+.af-why { font-size: 0.9375rem; line-height: 1.45; }
+.af-why b { display: block; margin-bottom: 2px; font-size: 0.75rem; color: var(--muted); }
+
+/* низ карточки: всегда на виду, ведёт к человеку целиком */
+.af-open { flex: none; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; min-height: 52px; padding: 0 14px; background: var(--concrete); color: var(--ink); text-decoration: none; }
+.af-open b { font-family: var(--display); font-style: oblique var(--slant); font-weight: 800; font-size: 1rem; white-space: nowrap; }
+.af-open span { font-size: 0.8125rem; color: var(--muted); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.af-open .i { width: 1.25em; height: 1.25em; }
+@media (hover: hover) {
+  .af-card:not(.af-card--empty):hover .af-open { background: var(--orange); }
+  .af-card:not(.af-card--empty):hover .af-open span { color: var(--ink); }
+  .af-id h2 a:hover { text-decoration: underline; text-decoration-color: var(--orange); text-decoration-thickness: 3px; text-underline-offset: 4px; }
+}
+
+/* решения: тёмная панель, отдельно от белого листа */
+.af-actions { display: grid; grid-template-columns: 1.5fr 1fr 1fr 76px; gap: 8px; padding: 12px 12px max(14px, env(safe-area-inset-bottom)); background: var(--ink); }
+.af-actions .btn { width: 100%; min-height: 56px; padding: 0 8px; font-size: 0.9375rem; --cut: 9px; }
+.btn--quiet { --bg: var(--ink-3); --fg: var(--paper); }
+.btn--quiet:hover { --bg: #4a4a4a; }
+.af-actions .btn[disabled] { --bg: var(--ink-2); --fg: #8a8a83; }
+.af-actions .btn--msg .i { color: var(--orange); }
+.af-actions .btn--msg[disabled] .i { color: inherit; }
+.af-actions__who { display: none; }
+@media (max-width: 619px) {
+  .af-actions .btn--msg { flex-direction: column; gap: 4px; font-family: var(--text); font-style: normal; font-weight: 700; font-size: 0.6875rem; letter-spacing: 0; }
+  .af-actions .btn--msg .i { width: 22px; height: 22px; }
+}
+
+/* список всех заявок: на телефоне открывается поверх ленты, на компьютере стоит слева */
+.af-rail { display: none; min-height: 0; flex-direction: column; background: var(--paper); color: var(--ink); }
+.af-rail.is-open { display: flex; position: fixed; inset: 0; z-index: 40; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+.af-rail__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 12px 12px 16px; border-bottom: 3px solid var(--ink); }
+.af-rail__head b { font-family: var(--display); font-style: oblique var(--slant); font-weight: 800; font-size: 1.125rem; }
+.af-rail .af-rail__close { display: inline-flex; background: var(--ink); color: var(--paper); }
+.af-rail ol { list-style: none; margin: 0; padding: 4px 0 16px; overflow-y: auto; min-height: 0; scrollbar-width: thin; }
+.af-rail__row { width: 100%; display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 12px; align-items: center; min-height: 60px; padding: 8px 16px 8px 12px; border: 0; border-bottom: 1px solid var(--concrete); background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+.af-rail__row:hover { background: var(--concrete); }
+.af-rail__row[aria-current="true"] { background: var(--ink); color: var(--paper); }
+.af-rail__row[aria-current="true"] small { color: var(--muted-on-ink); }
+.af-rail__u { height: 34px; display: grid; place-items: center; background: var(--u); color: var(--u-fg); font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: 1rem; font-variant-numeric: tabular-nums; clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%); }
+.af-rail__txt { min-width: 0; }
+.af-rail__txt b { display: block; font-size: 0.9375rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.af-rail__txt small { display: flex; align-items: center; gap: 8px; margin-top: 2px; font-size: 0.75rem; color: var(--muted); white-space: nowrap; overflow: hidden; }
+.af-rail__txt .tag { flex: none; font-size: 0.6875rem; padding-block: 1px; }
+
+@media (min-width: 620px) {
+  .af-chips { padding-inline: 20px; }
+  .af-feed { --gap: 12px; padding-inline: 16px; }
+  .af-head { padding: 18px 18px 14px; }
+  .af-media { margin-inline: 18px; }
+  .af-info { padding-inline: 18px; }
+  .af-open { padding-inline: 18px; }
+  .af-actions { grid-template-columns: 1.4fr 1fr 1fr 1.3fr; padding-inline: 16px; }
+}
+@media (min-width: 1000px) {
+  .af-back { display: inline-flex; }
+  .af-listbtn { display: none; }
+  .af-chips { padding: 4px 24px 14px; }
+  .af-rail .af-rail__close { display: none; }
+  .af-body { grid-template-columns: 320px minmax(0, 1fr); }
+  .af-rail, .af-rail.is-open { display: flex; position: static; z-index: auto; padding-top: 0; }
+  .af-rail__head { padding: 14px 16px; }
+  .af-feed { --gap: 16px; --peek: 18px; padding-inline: 20px; }
+  .af-card { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(340px, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; grid-template-areas: "media head" "media info" "media open"; }
+  .af-card--empty { display: flex; }
+  .af-head { grid-area: head; padding: 22px 24px 14px; }
+  .af-media { grid-area: media; aspect-ratio: auto; min-height: 0; max-height: none; margin: 20px 0 20px 20px; }
+  .af-media--none { place-items: center; }
+  .af-info { grid-area: info; min-height: 0; gap: 16px; padding: 6px 24px 30px; }
+  .af-open { grid-area: open; margin: 0 20px 20px 24px; padding-inline: 18px; }
+  .af-head .slab { width: 112px; --cut: 14px; }
+  .af-head .slab b { font-size: 2.75rem; }
+  .af-head .slab span { font-size: 0.75rem; }
+  .af-id { padding-left: 18px; }
+  .af-id h2 { font-size: clamp(1.625rem, 1rem + 1.2vw, 2.25rem); }
+  .af-id p { font-size: 0.9375rem; margin: 6px 0 8px; }
+  .af-media .player__play { width: 108px; height: 84px; }
+  .af-media .player__play .i { width: 34px; height: 34px; }
+  .af-recap p { font-size: 1.0625rem; }
+  .af-recap p.is-clamp { display: block; overflow: visible; }
+  .af-recap__more { display: none; }
+  .af-actions { grid-template-columns: minmax(0, 1fr) auto auto auto auto; align-items: center; gap: 8px; padding: 14px 28px 16px; }
+  .af-actions__who { display: block; margin: 0; font-size: 0.9375rem; min-width: 0; color: var(--paper); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .af-actions__who small { display: block; font-size: 0.75rem; color: var(--muted-on-ink); }
+  .af-actions .btn { width: auto; min-width: 132px; padding: 0 calc(18px + var(--cut)); --cut: 11px; }
+}
+/* небольшой ноутбук и планшет боком: список уже, имя идёт во всю ширину над видео, кнопки делят строку поровну */
+@media (min-width: 1000px) and (max-width: 1279px) {
+  .af-body { grid-template-columns: 272px minmax(0, 1fr); }
+  .af-card { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); grid-template-areas: "head head" "media info" "open open"; }
+  .af-head { padding: 20px 22px 14px; }
+  .af-media { margin: 0 0 18px 22px; }
+  .af-info { padding: 0 22px 28px 20px; }
+  .af-open { margin: 0; padding-inline: 22px; }
+  .af-actions { grid-template-columns: 1.3fr 1fr 1fr 1.4fr; padding-inline: 22px; }
+  .af-actions__who { display: none; }
+  .af-actions .btn { width: 100%; min-width: 0; padding: 0 10px; }
+}
+/* низкий экран телефона: кнопка видео меньше, чтобы не наезжала на подпись */
+@media (max-width: 619px) and (max-height: 680px) {
+  .af-media .player__play { width: 60px; height: 44px; }
+  .af-media .player__play .i { width: 20px; height: 20px; }
+  .af-media small { left: 10px; bottom: 7px; font-size: 0.6875rem; }
+}
+
+/* «Вернуть»: снять решение — отдельной полосой над кнопками, чтобы не сжимать их на телефоне */
+.af-actions .btn--back { grid-column: 1 / -1; order: -1; min-height: 40px; width: 100%; font-size: 0.875rem; }
+.af-actions .btn--back .i { color: var(--orange); }

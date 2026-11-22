@@ -1,0 +1,178 @@
+/* ============================================================
+   Партнёры: плашки логотипов, секция на главной, страница /partners с формой, заявки в /team/partners
+   ============================================================ */
+
+/* ---------- плашка с логотипом ---------- */
+.plogo {
+  position: relative; display: grid; place-items: center; overflow: hidden;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  height: 150px; padding: 22px 26px; background: var(--paper); box-shadow: inset 0 0 0 1px var(--concrete-2);
+}
+.plogo--lg { height: 190px; padding: 28px 34px; }
+.plogo--ink { background: var(--ink); box-shadow: none; }
+.plogo--red { background: #ee1122; box-shadow: none; }
+.plogo img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
+.plogo__iba { width: min(220px, 100%); }
+.plogo__img--exponenta { height: 100%; aspect-ratio: 1; }
+.plogo__img--selo-lesnoe { max-height: 100%; }
+.plogo__img--okadzaki { width: min(240px, 100%); }
+/* Jana Men Health: логотип Jana Men и слово HEALTH рядом, как подпись бренда */
+.plogo__jmh { display: inline-flex; flex-direction: column; align-items: center; gap: 10px; max-width: 100%; }
+.plogo__jmh img { height: 62px; width: auto; max-width: 100%; }
+.plogo--lg .plogo__jmh img { height: 84px; }
+.plogo__jmh b {
+  font-family: var(--display); font-weight: 900; font-size: 1.125rem; letter-spacing: 0.42em; margin-right: -0.42em; color: var(--paper);
+  padding-top: 8px; border-top: 3px solid var(--orange); line-height: 1;
+}
+.plogo--lg .plogo__jmh b { font-size: 1.375rem; }
+
+/* ---------- секция на главной ---------- */
+.pteaser { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.pteaser__card {
+  display: flex; flex-direction: column; height: 100%; text-decoration: none; color: inherit; background: var(--paper);
+  transition: transform 0.3s var(--ease-out), box-shadow 0.25s ease;
+}
+.pteaser__card:hover { transform: translateY(-4px); box-shadow: 0 0 0 1px var(--ink), 0 20px 32px -22px rgb(17 17 17 / 0.5); }
+.pteaser__card:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+.pteaser__body { display: grid; gap: 2px; padding: 12px 14px 14px; border: 1px solid var(--concrete-2); border-top: 0; flex: 1; }
+.pteaser__body b { font-weight: 800; font-size: 1rem; }
+.pteaser__body small { color: var(--muted); font-size: 0.8125rem; line-height: 1.35; }
+.pteaser__acts { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; margin-top: 24px; }
+.pteaser__become { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; color: var(--ink); text-decoration: underline; text-decoration-color: var(--orange); text-decoration-thickness: 3px; text-underline-offset: 6px; }
+.pteaser__become .i { width: 18px; height: 18px; color: var(--orange-press); }
+@media (max-width: 1100px) { .pteaser { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 640px) {
+  .pteaser { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .pteaser .plogo { height: 112px; padding: 16px 18px; }
+  .pteaser .plogo__jmh { gap: 6px; }
+  .pteaser .plogo__jmh img { height: 44px; }
+  .pteaser .plogo__jmh b { font-size: 0.875rem; padding-top: 6px; }
+  .pteaser__body { padding: 10px 12px 12px; }
+  .pteaser__body b { font-size: 0.9375rem; }
+  .pteaser__body small { font-size: 0.75rem; }
+}
+
+/* ---------- страница: карточки партнёров ---------- */
+.partners .rhero__in .btn { margin-top: 4px; }
+.pcards2 { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.pcard2 { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); background: var(--paper); box-shadow: 0 0 0 1px var(--concrete-2); scroll-margin-top: 90px; }
+.pcard2 .plogo { height: 100%; min-height: 220px; }
+.pcard2__body { display: grid; align-content: start; gap: 8px; padding: 24px 26px 26px; }
+.pcard2__tag { justify-self: start; padding: 4px 14px 4px 10px; background: var(--orange); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; clip-path: polygon(0 0, 100% 0, calc(100% - 7px) 100%, 0 100%); }
+.pcard2__name { margin: 4px 0 0; font-family: var(--display); font-weight: 900; font-size: var(--step-2); line-height: 1.05; }
+.pcard2__body p { margin: 0; color: var(--ink-3); line-height: 1.55; }
+.pcard2__links { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 6px; }
+.pcard2__link { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 0.9375rem; color: var(--ink); text-decoration: underline; text-decoration-color: var(--orange); text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.pcard2__link .i { width: 15px; height: 15px; }
+.pcard2:target { box-shadow: 0 0 0 3px var(--orange); }
+@media (max-width: 1100px) { .pcards2 { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  .pcard2 { grid-template-columns: 1fr; }
+  .pcard2 .plogo { min-height: 0; height: 150px; }
+  .pcard2__body { padding: 18px 18px 22px; }
+}
+
+/* ---------- страница: форма «Стать партнёром» ---------- */
+.pbecome-sec { padding-top: clamp(24px, 4vw, 48px); scroll-margin-top: 80px; }
+.pbecome { --cut: 0px; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 4vw, 56px); padding: clamp(24px, 4vw, 56px); align-items: start; }
+.pbecome__intro { display: grid; gap: 16px; align-content: start; position: sticky; top: 100px; }
+.pbecome__intro .h1 { margin: 0; color: var(--paper); }
+.pbecome__intro p { margin: 0; color: var(--muted-on-ink); line-height: 1.6; max-width: 46ch; }
+.pbecome__list { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 12px; }
+.pbecome__list li { display: flex; gap: 10px; align-items: flex-start; color: var(--paper); font-weight: 600; line-height: 1.45; }
+.pbecome__list .i { flex: none; width: 20px; height: 20px; color: var(--orange); margin-top: 2px; }
+.pbecome__intro .pbecome__note { font-size: 0.9375rem; padding-left: 14px; border-left: 3px solid var(--orange); }
+
+.pform-card { background: var(--paper); color: var(--ink); padding: clamp(20px, 3vw, 36px); }
+.pform { display: grid; gap: 22px; }
+.pform .h3 { margin: 0; }
+.pform__note { margin: -14px 0 0; color: var(--muted); font-size: 0.875rem; }
+.pform__group { border: 0; margin: 0; padding: 0; display: grid; gap: 14px; }
+.pform__group legend { padding: 0; margin-bottom: 12px; font-weight: 800; font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); display: flex; align-items: center; gap: 10px; width: 100%; }
+.pform__group legend::after { content: ""; flex: 1; height: 1px; background: var(--concrete-2); }
+.pform__group > .hint { margin: -6px 0 -4px; }
+.pform__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; }
+.pform .textarea { min-height: 140px; }
+.pform__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.pchip {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 16px; border: 0; cursor: pointer;
+  background: var(--concrete); color: var(--ink); font: inherit; font-weight: 600; font-size: 0.875rem;
+  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%); transition: background 0.15s ease;
+}
+.pchip:hover { background: var(--concrete-2); }
+.pchip[aria-pressed="true"] { background: var(--orange); }
+.pchip .i { width: 15px; height: 15px; }
+.pchip:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.pform__trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.pform__send { justify-self: start; }
+.pform__send[disabled] { opacity: 0.6; cursor: progress; }
+.pform-done { display: grid; gap: 14px; justify-items: start; padding: 20px 0; }
+.pform-done .h3 { margin: 0; }
+.pform-done p { margin: 0; color: var(--ink-3); line-height: 1.55; max-width: 46ch; }
+.pform-done__ico { width: 56px; height: 56px; display: grid; place-items: center; background: var(--orange); clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); }
+.pform-done__ico .i { width: 28px; height: 28px; }
+@media (max-width: 960px) {
+  .pbecome { grid-template-columns: 1fr; }
+  .pbecome__intro { position: static; }
+}
+@media (max-width: 560px) {
+  .pbecome { padding: 22px 16px; margin-inline: calc(var(--gutter) * -1); }
+  .pform-card { padding: 20px 16px 24px; margin-inline: -4px; }
+  .pform__grid { grid-template-columns: 1fr; }
+  .pform__send { justify-self: stretch; }
+}
+
+/* ---------- команда: заявки партнёров ---------- */
+.preq { padding-bottom: 64px; }
+.preq__lead { margin: 8px 0 0; color: var(--muted); max-width: 70ch; }
+.preq__tabs { display: inline-flex; flex-wrap: wrap; margin-bottom: 20px; max-width: 100%; }
+.preq__tabs button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 18px; white-space: nowrap; cursor: pointer; }
+.preq__tabs .num { opacity: 0.65; font-size: 0.875rem; }
+.preq__empty { padding: 28px; background: var(--concrete); color: var(--muted); }
+.preq__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.preq__card { background: var(--paper); box-shadow: 0 0 0 1px var(--concrete-2); padding: 20px 22px; display: grid; gap: 14px; border-left: 5px solid var(--concrete-3); }
+.preq__card--new { border-left-color: var(--orange); }
+.preq__card--deal { border-left-color: var(--green); }
+.preq__card--declined { opacity: 0.75; }
+.preq__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.preq__company { margin: 0; font-family: var(--display); font-weight: 900; font-size: 1.375rem; line-height: 1.15; }
+.preq__meta { margin: 4px 0 0; color: var(--muted); font-size: 0.875rem; }
+.preq__select { min-width: 170px; min-height: 42px; font-weight: 700; }
+.preq__select--new { background-color: #fff3e3; }
+.preq__select--deal { background-color: #e5f4ea; }
+.preq__contact { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; font-size: 0.9375rem; }
+.preq__contact a, .preq__who { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); }
+.preq__contact a { text-decoration: underline; text-decoration-color: var(--orange); text-underline-offset: 4px; overflow-wrap: anywhere; }
+.preq__contact .i { width: 16px; height: 16px; color: var(--muted); flex: none; }
+.preq__who small { color: var(--muted); }
+.preq__formats { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.preq__msg { margin: 0; padding: 14px 16px; background: var(--concrete); white-space: pre-wrap; line-height: 1.55; overflow-wrap: anywhere; }
+.preq__foot { display: flex; gap: 14px; align-items: flex-end; flex-wrap: wrap; }
+.preq__note { flex: 1; min-width: 240px; display: grid; gap: 6px; font-size: 0.8125rem; font-weight: 700; color: var(--muted); }
+.preq__note .textarea { min-height: 64px; font-weight: 400; color: var(--ink); }
+
+/* ---------- «Чем вы полезны обществу и проекту» — варианты первого экрана ---------- */
+.pv-kicker { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 0.8125rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--orange); }
+.pv-kicker .i { width: 18px; height: 18px; }
+
+/* A: вопрос в тёмной карточке справа */
+.pv-a__in { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+.pv-a__left { display: grid; gap: 20px; }
+.pv-a .display { margin: 0; font-size: clamp(2.5rem, 1.2rem + 5vw, 5.5rem); }
+.pv-a__sub { margin: 0; font-size: var(--step-1); line-height: 1.45; max-width: 30ch; font-weight: 500; }
+.pv-a__card {
+  --cut: 26px; position: relative; display: grid; gap: 18px; justify-items: start;
+  padding: clamp(28px, 3.4vw, 44px) clamp(28px, 3.6vw, 52px) clamp(30px, 3.6vw, 46px);
+  background: var(--ink); color: var(--paper);
+  clip-path: polygon(var(--cut) 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
+  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.6);
+}
+.pv-a .pv-a__card .pv-a__q { margin: 0; font-size: clamp(2.6rem, 1.2rem + 3.6vw, 4.6rem); line-height: 0.98; }
+.pv-a__card p { margin: 0; color: #cfcfc8; line-height: 1.55; max-width: 44ch; }
+.pv-a__card .btn { margin-top: 6px; }
+@media (max-width: 900px) {
+  .pv-a__in { grid-template-columns: 1fr; }
+  .pv-a__card { --cut: 14px; }
+}
+
+.pv-a__q em { font-style: normal; color: var(--orange); }

@@ -1,0 +1,270 @@
+/* ===== «О программе» на главной ===== */
+
+/* проявление при прокрутке: прячем только когда JS включил наблюдатель (без JS и при «уменьшить движение» всё видно) */
+.js-reveal [data-reveal] { opacity: 0; transform: translateY(26px); transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); transition-delay: var(--d, 0ms); }
+.js-reveal [data-reveal].is-in { opacity: 1; transform: none; }
+
+.pg-kicker { margin: 0 0 14px; display: inline-flex; align-items: center; gap: 10px; font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--orange); }
+.pg-kicker::before { content: ""; width: 28px; height: 4px; background: var(--orange); clip-path: polygon(3px 0, 100% 0, calc(100% - 3px) 100%, 0 100%); }
+
+/* 1. вступление: текст и общее фото */
+.pg-intro { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 4vw, 64px); align-items: center; }
+.pg-intro .h1 { margin: 0 0 22px; }
+.pg-intro .h1 span { color: var(--orange); }
+.pg-intro p { margin: 0 0 14px; color: #cfcfc8; line-height: 1.6; }
+.pg-intro .pg-lead { color: var(--paper); font-size: var(--step-1); line-height: 1.5; }
+.pg-intro__photo .shot__img img { aspect-ratio: 16 / 9; object-position: center 30%; transition: transform 0.8s var(--ease-out); }
+.pg-intro__photo:hover .shot__img img { transform: scale(1.03); }
+
+/* цифры проекта */
+.pg-stats { margin: clamp(36px, 5vw, 64px) 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.pg-stats > div { position: relative; min-width: 0; padding: 20px 22px 22px 40px; background: var(--ink-2); clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); }
+.pg-stats > div::before { content: ""; position: absolute; left: 18px; top: 22px; bottom: 22px; width: 4px; background: var(--orange); transform: skewX(-12deg); }
+.pg-stats dt { font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: clamp(2rem, 1.2rem + 2.2vw, 3.25rem); line-height: 1; color: var(--orange); white-space: nowrap; }
+.pg-stats dd { margin: 8px 0 0; font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #cfcfc8; }
+
+/* фото с событий: мозаика */
+.pg-gallery { margin-top: 24px; display: grid; grid-template-columns: 1.25fr 1fr 0.85fr; grid-template-rows: repeat(2, clamp(170px, 18vw, 250px)); grid-template-areas: "a b c" "d e c"; gap: 10px; }
+.pg-gallery__item { margin: 0; overflow: hidden; background: var(--ink-2); clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%); }
+.pg-gallery__item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease-out), filter 0.4s ease; filter: saturate(0.92); }
+.pg-gallery__item:hover img { transform: scale(1.05); filter: none; }
+.pg-gallery__item--a { grid-area: a; }
+.pg-gallery__item--b { grid-area: b; }
+.pg-gallery__item--c { grid-area: c; }
+.pg-gallery__item--c img { object-position: center 30%; }
+.pg-gallery__item--d { grid-area: d; }
+.pg-gallery__item--e { grid-area: e; }
+.pg-gallery__cap { grid-column: 1 / -1; margin: 4px 0 0; font-size: 0.8125rem; color: var(--muted-on-ink); }
+
+/* 2. результаты героев */
+.pg-heroes { background: var(--paper); }
+.pg-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 32px; margin-bottom: clamp(24px, 4vw, 40px); }
+.pg-head .h1 { margin: 0; }
+.pg-head p { margin: 0; max-width: 40ch; color: var(--muted); }
+.pg-tr { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.tr { display: grid; grid-template-rows: auto auto; background: var(--concrete); }
+.tr__photos { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 12px 12px 0; }
+.tr__ph { position: relative; margin: 0; aspect-ratio: 3 / 4; overflow: hidden; background: #fff; }
+.tr__ph img { width: 100%; height: 100%; object-fit: cover; object-position: center 12%; transition: transform 0.7s var(--ease-out); }
+.tr:hover .tr__ph img { transform: scale(1.04); }
+.tr__ph figcaption { position: absolute; left: 10px; bottom: 10px; padding: 4px 14px 4px 10px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%); }
+.tr__ph--before figcaption { background: var(--ink); color: var(--paper); }
+.tr__ph--after { box-shadow: inset 0 -5px 0 var(--orange); }
+.tr__ph--after figcaption { background: var(--orange); color: var(--ink); bottom: 15px; }
+.tr__body { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "who lost" "nums lost"; gap: 4px 16px; align-items: center; padding: 16px 18px 18px; }
+.tr__who { grid-area: who; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.tr__name { font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: 1.5rem; line-height: 1.1; text-transform: uppercase; }
+.tr__country { font-weight: 800; font-size: 0.875rem; color: var(--orange-press); text-transform: uppercase; letter-spacing: 0.04em; }
+.tr__nums { grid-area: nums; margin: 0; display: flex; align-items: center; gap: 12px; }
+.tr__nums span { display: grid; line-height: 1.15; }
+.tr__nums small { font-size: 0.6875rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.tr__nums b { font-size: 1.0625rem; }
+.tr__nums > .i { width: 18px; height: 18px; color: var(--muted); }
+.tr__lost { grid-area: lost; padding: 10px 22px; background: var(--orange); color: var(--ink); font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.125rem); line-height: 1; white-space: nowrap; clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%); }
+
+/* 3. подход */
+.pg-way { background: var(--concrete); }
+.pg-way__top { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(28px, 4vw, 64px); align-items: center; }
+.pg-way__text .h1 { margin: 0 0 20px; }
+.pg-way__text p { margin: 0 0 14px; color: var(--ink-3); line-height: 1.6; max-width: 58ch; }
+.pg-pillars { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pg-pillars li { display: grid; gap: 6px; align-content: center; min-height: 128px; padding: 20px 26px; background: var(--ink); color: var(--paper); clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); transition: transform 0.3s var(--ease-out); }
+.pg-pillars li:hover { transform: translateY(-3px); }
+.pg-pillars b { font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.125rem); line-height: 1.05; color: var(--orange); }
+.pg-pillars span { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #cfcfc8; }
+
+.pg-sys { margin-top: clamp(48px, 7vw, 88px); }
+.pg-sys__head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px clamp(28px, 4vw, 64px); align-items: end; margin-bottom: 24px; }
+.pg-sys__head .h2 { margin: 0; }
+.pg-sys__head p { margin: 0; color: var(--ink-3); line-height: 1.6; }
+.pg-sys__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.pg-sys__list li { position: relative; display: grid; gap: 6px; align-content: start; padding: 22px 22px 24px; background: var(--paper); border-top: 4px solid var(--ink); transition: border-color 0.25s ease, transform 0.3s var(--ease-out); }
+.pg-sys__list li:hover { border-top-color: var(--orange); transform: translateY(-3px); }
+.pg-sys__n { font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: 1rem; color: var(--orange); }
+.pg-sys__list b { font-family: var(--display); font-style: oblique var(--slant); font-weight: 800; font-size: 1.1875rem; line-height: 1.2; }
+.pg-sys__list span:last-child { color: var(--ink-3); font-size: 0.9375rem; line-height: 1.5; }
+.pg-sys__gist { margin: 16px 0 0; display: grid; gap: 6px; padding: clamp(20px, 3vw, 30px) clamp(26px, 4vw, 48px); background: var(--orange); color: var(--ink); clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%); }
+.pg-sys__gist small { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+.pg-sys__gist span { font-family: var(--display); font-style: oblique var(--slant); font-weight: 800; font-size: clamp(1.25rem, 0.95rem + 1vw, 1.75rem); line-height: 1.25; }
+
+/* 4. основатель */
+.pg-founder { background: var(--ink); color: var(--paper); overflow: hidden; }
+.pg-founder__in { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 5vw, 80px); align-items: end; }
+.pg-founder__photo { position: relative; margin: 0; align-self: stretch; display: flex; align-items: flex-end; justify-content: center; min-height: 420px; }
+.pg-founder__plane { position: absolute; left: 6%; right: 0; bottom: 0; height: 78%; background: var(--orange); clip-path: polygon(16% 0, 100% 0, 84% 100%, 0 100%); }
+.pg-founder__photo img { position: relative; width: min(100%, 480px); height: auto; margin-bottom: calc(-1 * clamp(64px, 9vw, 120px)); filter: drop-shadow(0 24px 30px rgba(0, 0, 0, 0.45)); }
+.pg-founder__text { padding-bottom: 8px; }
+.pg-founder__text .display { margin: 0 0 26px; font-size: clamp(2.5rem, 1.2rem + 4.4vw, 5rem); }
+.pg-facts { list-style: none; margin: 0 0 32px; padding: 0 0 0 4px; display: grid; gap: 16px; }
+.pg-facts li { position: relative; padding-left: 34px; color: #dcdcd5; font-size: 1.0625rem; line-height: 1.5; }
+.pg-facts li::before { content: ""; position: absolute; left: 0; top: 0.32em; width: 16px; height: 16px; background: var(--orange); clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
+.pg-facts li:not(:last-child)::after { content: ""; position: absolute; left: 7px; top: calc(0.32em + 20px); bottom: -14px; width: 2px; background: rgba(255, 138, 0, 0.35); }
+.pg-quote { position: relative; margin: 0; padding: 26px 30px 24px 72px; background: var(--ink-2); border-left: 6px solid var(--orange); }
+.pg-quote::before { content: "“"; position: absolute; left: 20px; top: 6px; font-family: var(--display); font-weight: 900; font-size: 5rem; line-height: 1; color: var(--orange); }
+.pg-quote p { margin: 0 0 12px; font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: clamp(1.5rem, 1rem + 1.6vw, 2.375rem); line-height: 1.15; text-wrap: balance; }
+.pg-quote cite { font-style: normal; font-size: 0.875rem; font-weight: 700; color: var(--orange); }
+@media (prefers-reduced-motion: no-preference) {
+  .pg-quote.is-in::before { animation: pg-quote 0.9s var(--ease-out) 0.35s both; }
+}
+@keyframes pg-quote { from { opacity: 0; transform: translateY(10px) scale(0.8); } }
+
+:lang(kk) .tr__name, :lang(kk) .pg-pillars b, :lang(kk) .pg-quote p { line-height: 1.2; }
+
+/* планшет */
+@media (max-width: 1000px) {
+  .pg-intro, .pg-way__top, .pg-sys__head { grid-template-columns: minmax(0, 1fr); }
+  .pg-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pg-sys__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pg-founder__in { grid-template-columns: minmax(0, 4fr) minmax(0, 6fr); }
+}
+/* телефон */
+@media (max-width: 700px) {
+  .pg-gallery { grid-template-columns: 1fr 1fr; grid-template-rows: 170px 150px 150px 170px; grid-template-areas: "a a" "b c" "d c" "e e"; }
+  .pg-tr { grid-template-columns: minmax(0, 1fr); }
+  .pg-sys__list { grid-template-columns: minmax(0, 1fr); }
+  .pg-founder__in { grid-template-columns: minmax(0, 1fr); }
+  .pg-pillars { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .pg-pillars li { min-height: 104px; padding: 16px 12px 16px 18px; clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); }
+  .pg-pillars b { font-size: clamp(1rem, 0.55rem + 2.3vw, 1.375rem); }
+  .pg-pillars span { font-size: 0.75rem; }
+  .pg-way__text .h1, .pg-heroes .h1, .pg-intro .h1 { overflow-wrap: anywhere; hyphens: auto; }
+  .pg-founder__photo { min-height: 0; max-width: 340px; width: 100%; justify-self: center; }
+  .pg-founder__photo img { width: 78%; margin-bottom: 0; }
+  .pg-founder__plane { height: 70%; }
+}
+@media (max-width: 420px) {
+  .pg-stats > div { padding: 16px 12px 18px 30px; }
+  .pg-stats > div::before { left: 14px; }
+  .pg-stats dt { font-size: clamp(1.625rem, 0.9rem + 3.6vw, 2rem); }
+  .pg-stats dd { font-size: 0.75rem; }
+  .tr__body { grid-template-columns: 1fr; grid-template-areas: "who" "nums" "lost"; }
+  .tr__lost { justify-self: start; }
+  .pg-quote { padding: 22px 20px 20px 56px; }
+  .pg-quote::before { left: 14px; font-size: 4rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pg-intro__photo .shot__img img, .pg-gallery__item img, .tr__ph img, .pg-pillars li, .pg-sys__list li { transition: none; }
+}
+
+/* цифры проекта: четыре в ряд только на широком экране, иначе «6 000 кг» не помещается в плашку */
+@media (max-width: 1200px) { .pg-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* 2. основатель сразу после «О программе»: чуть светлее фон, чтобы два тёмных блока не слились */
+.program + .pg-founder { background: #1b1b1b; }
+.program + .pg-founder .pg-quote { background: var(--ink); }
+
+/* общие заголовки новых блоков: акцентная часть оранжевым */
+.pg-fit .h1 span, .pg-health .h1 span { color: var(--orange); }
+.pg-eco .h1 span { color: var(--orange-press); }
+.pg-health .h1 span { color: var(--orange-press); }
+.pg-eco .h1, .pg-fit .h1, .pg-health .h1 { margin: 0 0 20px; text-wrap: balance; }
+.pg-lead { font-size: var(--step-1); line-height: 1.5; }
+
+/* 3. экосистема */
+.pg-eco { background: var(--paper); }
+.pg-eco__head { max-width: 1040px; margin-bottom: clamp(26px, 4vw, 44px); }
+.pg-eco__lead { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px clamp(24px, 3vw, 48px); }
+.pg-eco__lead p { margin: 0; color: var(--ink-3); line-height: 1.6; }
+.pg-eco__lead p:first-child { color: var(--ink); font-weight: 600; font-size: 1.0625rem; }
+.pg-eco__grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 14px; }
+.pg-eco__card { display: grid; grid-template-rows: 1fr auto; background: var(--ink); color: var(--paper); clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%); }
+.pg-eco__about { padding: clamp(22px, 3vw, 32px) clamp(26px, 3vw, 38px) 18px; }
+.pg-eco__about h3 { margin: 0 0 10px; font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: clamp(1.375rem, 1.1rem + 0.9vw, 1.875rem); line-height: 1.1; text-transform: uppercase; color: var(--orange); }
+.pg-eco__about p { margin: 0; color: #dcdcd5; line-height: 1.55; }
+.pg-eco__nums { margin: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); border-top: 1px solid rgb(255 255 255 / 0.12); }
+.pg-eco__nums > div { padding: 16px clamp(16px, 2vw, 26px) 20px clamp(26px, 3vw, 38px); min-width: 0; }
+.pg-eco__nums > div + div { border-left: 1px solid rgb(255 255 255 / 0.12); padding-left: clamp(16px, 2vw, 26px); }
+.pg-eco__nums dt { font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: clamp(1.5rem, 1.05rem + 1.4vw, 2.375rem); line-height: 1; color: var(--orange); white-space: nowrap; }
+.pg-eco__nums dd { margin: 8px 0 0; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #cfcfc8; }
+.pg-eco .pg-gallery { margin-top: 14px; }
+.pg-eco .pg-gallery__cap { color: var(--muted); }
+
+/* текст + цифры (JanaFit), карточки (JanaFit и Health) */
+.pg-split { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(28px, 4vw, 64px); align-items: center; }
+.pg-split__text p { margin: 0 0 14px; line-height: 1.6; max-width: 62ch; }
+.pg-cards { list-style: none; margin: clamp(24px, 3vw, 36px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.pg-cards--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.pg-cards li { display: grid; gap: 8px; align-content: start; padding: 22px 22px 24px; border-top: 4px solid var(--orange); transition: transform 0.3s var(--ease-out); }
+.pg-cards li:hover { transform: translateY(-3px); }
+.pg-cards b { font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: 1.0625rem; line-height: 1.2; letter-spacing: 0.02em; text-transform: uppercase; color: var(--orange-press); }
+.pg-cards span { font-size: 0.9375rem; line-height: 1.5; }
+
+/* 4. JanaFit */
+.pg-fit { background: var(--ink); color: var(--paper); overflow: hidden; }
+.pg-fit .pg-split__text p { color: #cfcfc8; }
+.pg-fit .pg-split__text .pg-lead { color: var(--paper); }
+.pg-fit__nums { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.pg-fit__nums > div { position: relative; min-width: 0; padding: 20px 18px 20px 36px; background: var(--ink-2); clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); }
+.pg-fit__nums > div::before { content: ""; position: absolute; left: 16px; top: 20px; bottom: 20px; width: 4px; background: var(--orange); transform: skewX(-12deg); }
+.pg-fit__nums dt { font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: clamp(1.625rem, 1.1rem + 1.6vw, 2.5rem); line-height: 1; color: var(--orange); white-space: nowrap; }
+.pg-fit__nums dd { margin: 8px 0 0; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #cfcfc8; line-height: 1.4; }
+.pg-fit .pg-cards li { background: var(--ink-2); }
+.pg-fit .pg-cards b { color: var(--orange); }
+.pg-fit .pg-cards span { color: #cfcfc8; }
+.pg-fit__photos { margin-top: 14px; display: grid; grid-template-columns: 1.35fr repeat(4, minmax(0, 1fr)); gap: 10px; }
+.pg-fit__ph { margin: 0; overflow: hidden; aspect-ratio: 3 / 5; background: var(--ink-2); clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); }
+.pg-fit__ph--main { aspect-ratio: auto; }
+.pg-fit__ph img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: transform 0.7s var(--ease-out); }
+.pg-fit__ph:hover img { transform: scale(1.04); }
+
+/* 5. JanaMen Health */
+.pg-health { background: var(--concrete); }
+.pg-health__top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 4vw, 64px); align-items: center; }
+.pg-health .pg-split__text p { color: var(--ink-3); }
+.pg-health .pg-split__text .pg-lead { color: var(--ink); }
+.pg-health__photos { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr); grid-template-rows: repeat(2, clamp(150px, 15vw, 220px)); grid-template-areas: "a b" "a c"; gap: 10px; }
+.pg-health__ph { margin: 0; overflow: hidden; background: var(--ink); clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%); }
+.pg-health__ph img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease-out); }
+.pg-health__ph:hover img { transform: scale(1.05); }
+.pg-health__ph--a { grid-area: a; }
+.pg-health__ph--a img { object-position: center 20%; }
+.pg-health__ph--b { grid-area: b; }
+.pg-health__ph--c { grid-area: c; }
+.pg-health .pg-cards li { background: var(--paper); }
+.pg-health .pg-cards span { color: var(--ink-3); }
+.pg-health__end { margin-top: clamp(22px, 3vw, 32px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; }
+.pg-health__end p { margin: 0; max-width: 70ch; font-size: 1.0625rem; line-height: 1.55; color: var(--ink); }
+.pg-health .pg-sys__gist { margin-top: 22px; }
+
+/* новые блоки: планшет и телефон */
+@media (max-width: 1000px) {
+  .pg-split, .pg-health__top { grid-template-columns: minmax(0, 1fr); }
+  .pg-cards--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pg-fit__photos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pg-fit__ph--main { grid-row: span 2; }
+}
+@media (max-width: 700px) {
+  .pg-eco__lead, .pg-eco__grid, .pg-cards, .pg-cards--4 { grid-template-columns: minmax(0, 1fr); }
+  .pg-eco__nums { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pg-eco__nums > div:nth-child(3) { grid-column: 1 / -1; border-left: 0; border-top: 1px solid rgb(255 255 255 / 0.12); padding-left: clamp(26px, 3vw, 38px); }
+  .pg-fit__photos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pg-fit__ph--main { grid-row: auto; grid-column: 1 / -1; aspect-ratio: 4 / 5; }
+  .pg-health__photos { grid-template-rows: repeat(2, 150px); }
+  .pg-eco .h1, .pg-fit .h1, .pg-health .h1 { overflow-wrap: anywhere; hyphens: auto; }
+  .pg-health__end .btn { width: 100%; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pg-cards li, .pg-fit__ph img, .pg-health__ph img { transition: none; }
+}
+/* правки размеров: заголовки рядом с фото/цифрами — компактнее; цифры всегда влезают в плашку */
+.pg-fit .h1, .pg-health .h1 { font-size: clamp(2rem, 1.15rem + 2.4vw, 3.5rem); }
+.pg-eco__nums dt { font-size: clamp(1.375rem, 0.95rem + 1.2vw, 2.125rem); }
+.pg-fit__nums dt { font-size: clamp(1.5rem, 1rem + 1.3vw, 2.25rem); }
+@media (max-width: 1200px) { .pg-split { grid-template-columns: minmax(0, 1fr); } .pg-fit__nums { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .pg-fit__nums { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) {
+  .pg-fit__nums > div { padding: 16px 10px 16px 26px; }
+  .pg-fit__nums > div::before { left: 11px; top: 16px; bottom: 16px; }
+  .pg-fit__nums dt { font-size: clamp(1.1875rem, 0.55rem + 3.4vw, 1.5rem); }
+  .pg-fit__nums dd { font-size: 0.6875rem; }
+  .pg-eco__nums dt { font-size: 1.375rem; }
+}
+/* афиша JanaFit не задаёт высоту ряда: все фото марафона одной высоты */
+.pg-fit__ph { position: relative; }
+.pg-fit__ph--main img { position: absolute; inset: 0; }
+/* «Следите за проектом» в «О программе» */
+.pg-follow { margin-top: 22px; padding-top: 18px; border-top: 1px solid rgb(255 255 255 / 0.12); }
+.pg-intro .pg-follow__t { margin: 0 0 10px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--orange); }
+.socials--program .socials__a { background: var(--ink-2); }
+@media (max-width: 380px) { .pg-stats dt { font-size: 1.5rem; } }
+.socials--program .socials__txt small { display: none; } /* в «О программе» — только названия, все три в один ряд */
+.socials--program .socials__a { padding-right: 16px; }

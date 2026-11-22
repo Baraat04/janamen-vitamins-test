@@ -1,0 +1,309 @@
+/* ---------- Landing ---------- */
+
+/* Hero: orange plane bleeds off the left, ink plane holds Aitym on the right */
+.hero { position: relative; overflow: hidden; padding-bottom: 28px; }
+.hero__stage {
+  --edge: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+  --aw: clamp(340px, 36vw, 560px);
+  position: relative; min-height: clamp(600px, calc(100vh - 160px), 780px);
+}
+.hero__orange {
+  --cut: clamp(60px, 9vw, 150px);
+  position: relative; z-index: 2; width: 66%; min-height: clamp(600px, calc(100vh - 160px), 780px);
+}
+.hero__ink {
+  --cut: clamp(60px, 9vw, 150px);
+  position: absolute; z-index: 1; right: 0; top: 13%; bottom: 0; width: 47%;
+}
+.hero__copy {
+  position: relative; z-index: 4;
+  padding-left: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+  padding-top: clamp(40px, 6vh, 72px); padding-bottom: 64px;
+  max-width: calc(66vw - 120px);
+}
+.hero__copy .display { font-size: clamp(2.75rem, 1rem + 5.2vw, 6rem); margin-bottom: 28px; }
+:lang(kk) .display { letter-spacing: 0.07em; }
+/* казахский заголовок первого экрана длиннее («ТАРИХЫҢДЫ»): чуть мельче, чтобы слово не уходило под реплику Айтыма */
+:lang(kk) .hero__copy .display { font-size: clamp(2.5rem, 0.6rem + 4.6vw, 5rem); }
+:lang(kk) .h1, :lang(kk) .h2 { letter-spacing: 0.04em; } /* у Onest хвост Ң и ножка Д почти сливаются в «ҢД» — даём буквам воздух */
+.hero__copy .lead { max-width: 34ch; margin-bottom: 32px; color: var(--ink); }
+.hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero__privacy { display: flex; align-items: center; gap: 8px; margin-top: 24px; font-size: 0.9375rem; font-weight: 500; }
+/* «Что такое Jana Men? О программе ↓» — тёмная плашка-скос над заголовком, ведёт к разделу о программе ниже */
+.hero__about {
+  display: inline-flex; align-items: stretch; margin: 0 0 22px; text-decoration: none; font-size: 0.875rem; line-height: 1.2;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); transition: transform 0.25s var(--ease-out);
+}
+.hero__about > span { display: inline-flex; align-items: center; padding: 9px 14px; }
+.hero__about-q { background: var(--ink); color: var(--paper); font-weight: 500; padding-left: 18px !important; }
+.hero__about-go { gap: 4px; background: var(--paper); color: var(--ink); font-weight: 800; padding-right: 18px !important; }
+.hero__about-go .i { width: 16px; height: 16px; transition: transform 0.25s var(--ease-out); }
+.hero__about:hover .hero__about-go, .hero__about:focus-visible .hero__about-go { background: var(--ink); color: var(--orange); }
+.hero__about:hover .hero__about-go .i { transform: translateY(2px); }
+.hero__about:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.hero__about > span { white-space: nowrap; }
+/* узкий телефон: плашка чуть компактнее, чтобы казахский и английский текст шёл в одну строку */
+@media (max-width: 400px) {
+  .hero__about { font-size: 0.8125rem; }
+  .hero__about > span { padding: 9px 10px; }
+  .hero__about-q { padding-left: 14px !important; }
+  .hero__about-go { padding-right: 14px !important; }
+}
+/* раздел «О программе» не прячется под шапкой после перехода по ссылке */
+#program { scroll-margin-top: 12px; }
+
+.hero__aitym {
+  position: absolute; z-index: 3; margin: 0;
+  right: calc(var(--edge) - 40px);
+  bottom: 0; width: var(--aw);
+}
+.hero__aitym img { width: 100%; }
+.hero__speech {
+  position: absolute; z-index: 5;
+  right: calc(var(--edge) - 40px + var(--aw) * 0.66);
+  top: 30%;
+  width: min(290px, 24vw);
+  background: var(--paper); color: var(--ink);
+  padding: 18px 30px 20px;
+  clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+}
+.hero__speech p { margin: 10px 0 0; font-family: var(--display); font-style: oblique var(--slant); font-weight: 700; font-size: 1.1875rem; line-height: 1.3; }
+.hero__speech .wave { display: inline-flex; gap: 3px; align-items: center; height: 14px; margin-left: 6px; vertical-align: middle; }
+.hero__speech .wave i { width: 3px; background: var(--orange); height: 40%; animation: wave 1s ease-in-out infinite; }
+.hero__speech .wave i:nth-child(2) { animation-delay: 0.15s; }
+.hero__speech .wave i:nth-child(3) { animation-delay: 0.3s; }
+.hero__speech .wave i:nth-child(4) { animation-delay: 0.45s; }
+@keyframes wave { 0%, 100% { height: 30%; } 50% { height: 100%; } }
+
+.hero__road { position: relative; z-index: 6; margin-top: -36px; }
+/* белая подложка под шагами — того же косого кроя, что кнопки и сами шаги */
+.hero__road .road { --pad: 16px; background: var(--paper); padding: 10px var(--pad) 0; clip-path: polygon(var(--pad) 0, 100% 0, calc(100% - var(--pad)) 100%, 0 100%); }
+@media (max-width: 960px) { .hero__road .road { --pad: 12px; padding-top: 8px; } }
+
+@media (max-width: 960px) {
+  /* телефон и планшет: сверху тёмная полоса (реплика Айтыма + аватар), под ней оранжевый блок.
+     Полоса растёт по высоте реплики, поэтому белый блок не наезжает на оранжевый; аватар стоит под косым
+     краем оранжевого блока — его ровный нижний край не виден. */
+  .hero__stage { min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "top" "main"; }
+  .hero__orange { position: relative; grid-area: main; width: 100%; min-height: 0; margin-top: -30px; --cut: 56px; clip-path: polygon(0 30px, 100% 0, 100% calc(100% - 30px), 0 100%); }
+  .hero__copy { max-width: none; padding-right: var(--gutter); padding-top: 52px; padding-bottom: 56px; }
+  .hero__copy .display { margin-bottom: 16px; }
+  .hero__copy .lead { margin-bottom: 22px; }
+  .hero__ink { position: relative; grid-area: top; width: 100%; height: auto; min-height: 196px; top: auto; clip-path: none; }
+  .hero__aitym { position: relative; grid-area: top; justify-self: end; align-self: end; right: auto; top: auto; bottom: auto; width: 188px; margin-right: var(--gutter); z-index: 1; }
+  .hero__speech { position: relative; grid-area: top; justify-self: start; align-self: center; right: auto; left: auto; top: auto; bottom: auto; margin: 26px 0 46px var(--gutter); width: calc(100% - 188px - var(--gutter) * 2 + 24px); max-width: 320px; padding: 12px 22px 14px; }
+  .hero__speech p { font-size: 0.9875rem; line-height: 1.3; margin-top: 8px; }
+  .hero__road { margin-top: -18px; }
+  .hero { padding-bottom: 12px; }
+}
+@media (max-width: 520px) {
+  .hero__actions .btn { width: 100%; white-space: normal; text-align: left; justify-content: flex-start; padding-inline: 30px; }
+  .hero__privacy { font-size: 0.8125rem; margin-top: 12px; line-height: 1.3; }
+  .hero__copy { padding-bottom: 46px; }
+  .hero__copy .lead { font-size: 1rem; margin-bottom: 18px; }
+  .hero__actions .btn { min-height: 56px; }
+}
+
+/* Two ways */
+.ways__head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 40px; flex-wrap: wrap; }
+.ways__head p { max-width: 42ch; margin: 0; color: var(--muted); }
+.ways { display: grid; grid-template-columns: 7fr 5fr; gap: 16px; }
+.way { position: relative; padding: clamp(28px, 4vw, 52px); display: flex; flex-direction: column; gap: 18px; }
+.way--talk { --cut: 64px; padding-right: calc(64px + 24px); }
+.way--self { --cut: 64px; padding-left: calc(64px + 16px); }
+.way .h3 { font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem); }
+.way p { margin: 0; max-width: 46ch; }
+.way--talk p { color: #d7d7d0; }
+.way__cta { margin-top: auto; padding-top: 8px; }
+
+.mini-chat { display: grid; gap: 10px; margin: 6px 0 8px; max-width: 520px; }
+.bubble {
+  max-width: 85%; padding: 12px 18px; font-size: 0.9875rem; line-height: 1.45;
+  background: var(--ink-2); color: var(--paper);
+}
+.bubble--me { justify-self: end; background: var(--paper); color: var(--ink); }
+.bubble__who { display: block; font-size: 0.75rem; font-weight: 600; color: var(--orange); margin-bottom: 2px; }
+.bubble--me .bubble__who { color: var(--muted); }
+.filled {
+  justify-self: start; display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.875rem; font-weight: 600; color: var(--ink); background: var(--orange);
+  padding: 6px 18px; clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+
+.mini-form { display: grid; gap: 12px; margin: 6px 0 8px; }
+.mini-form .road { --cut: 10px; }
+.mini-form .road__step { min-height: 40px; padding-inline: 18px; }
+.mini-form .road__label, .mini-form .road__step:not(.is-now) .road__label { font-size: 0.8125rem; }
+.mini-form .road__step::after { display: none; }
+.mini-form__field { background: var(--paper); padding: 12px 16px; border-bottom: 3px solid var(--concrete-3); font-size: 0.9375rem; }
+.mini-form__field small { display: block; color: var(--muted); font-size: 0.75rem; font-weight: 600; }
+/* страна и город — рядом, как в анкете; поле, которое заполняют сейчас, подчёркнуто оранжевым */
+.mini-form__row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.mini-form__field.is-now { border-bottom-color: var(--orange); }
+.mini-form__hint { display: flex; align-items: flex-start; gap: 6px; margin: -2px 0 0; font-size: 0.8125rem; line-height: 1.4; color: var(--ink-3); }
+.mini-form__hint .i { flex: none; width: 15px; height: 15px; margin-top: 1px; color: var(--orange-press); }
+@media (max-width: 360px) { .mini-form__row { grid-template-columns: 1fr; } }
+
+.ways__mix {
+  grid-column: 1 / -1; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  padding: 22px clamp(28px, 4vw, 52px) 22px calc(clamp(28px, 4vw, 52px) + 20px);
+  --cut: 20px;
+}
+.ways__mix strong { font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: 1.375rem; text-transform: uppercase; }
+.ways__mix p { margin: 0; flex: 1 1 320px; }
+
+@media (max-width: 900px) {
+  .ways { grid-template-columns: 1fr; }
+  .way--talk, .way--self { --cut: 28px; padding: 32px calc(28px + 18px); }
+}
+
+/* Program / photos */
+.program { background: var(--ink); color: var(--paper); overflow: hidden; }
+.program__grid { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(28px, 4vw, 64px); align-items: center; }
+.shot { margin: 0; position: relative; }
+.shot__img { --cut: clamp(28px, 4vw, 64px); overflow: hidden; }
+.shot__img img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+.shot figcaption { margin-top: 10px; font-size: 0.8125rem; color: var(--muted-on-ink); }
+.shot figcaption a { color: inherit; }
+.program__text .h1 { margin-bottom: 24px; }
+.program__text .h1 span { color: var(--orange); }
+.program__text p { color: #d7d7d0; font-size: var(--step-1); line-height: 1.5; }
+.program__facts { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 2px; }
+.program__facts li {
+  display: flex; gap: 14px; align-items: baseline;
+  padding: 14px 0; border-top: 1px solid var(--ink-3); font-size: 1.0625rem;
+}
+.program__facts b { font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; color: var(--orange); min-width: 1.5em; }
+.program__row { display: grid; grid-template-columns: 7fr 5fr; gap: 16px; margin-top: clamp(40px, 6vw, 80px); align-items: end; }
+.program__row .shot:nth-child(3) { grid-column: 1 / -1; margin-top: 8px; }
+.program__row .shot:nth-child(2) .shot__img img { aspect-ratio: 4 / 3; }
+.program__row .shot:nth-child(3) { align-self: stretch; display: flex; }
+.program__quote {
+  --cut: clamp(32px, 6vw, 96px); background: var(--orange); color: var(--ink);
+  padding: clamp(28px, 4vw, 52px) calc(var(--cut) + 24px); display: flex; flex-direction: column; justify-content: center; gap: 10px; width: 100%;
+}
+.program__quote p { margin: 0; font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: clamp(2rem, 0.8rem + 4.4vw, 5.25rem); line-height: 1.02; text-transform: uppercase; letter-spacing: -0.02em; }
+:lang(kk) .program__quote p { line-height: 1.1; }
+.program__quote small { font-size: 0.875rem; font-weight: 500; }
+@media (max-width: 900px) {
+  .program__grid { grid-template-columns: 1fr; }
+  .program__row { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) { .program__row { grid-template-columns: 1fr; } }
+
+/* Real Aitym vs AI Aitym */
+.twin { display: grid; grid-template-columns: 1fr 1fr 1.1fr; gap: 16px; align-items: stretch; }
+.twin__photo { --cut: 40px; overflow: hidden; background: var(--concrete); }
+.twin__photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; aspect-ratio: 4 / 5; }
+.twin__ai { --cut: 40px; background: var(--orange); display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
+.twin__ai img { width: 94%; margin-top: 24px; }
+.twin__label { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 10px; margin-top: 10px; font-size: 0.875rem; color: var(--muted); }
+.twin__label span { white-space: nowrap; }
+.twin__text { padding: 12px 0 12px clamp(8px, 2vw, 32px); display: flex; flex-direction: column; justify-content: center; }
+.twin__text .h2 { margin-bottom: 20px; }
+.twin__text p { color: var(--ink-3); }
+@media (max-width: 900px) { .twin { grid-template-columns: 1fr 1fr; } .twin__text { grid-column: 1 / -1; padding: 8px 0 0; } }
+
+/* After sending */
+.after { background: var(--concrete); }
+.after .road { margin: 40px 0 48px; }
+.after .road__step { min-height: 112px; }
+.after .road__step:not(.is-now):not(.is-done) { background: var(--paper); }
+.after__cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 64px); }
+.after__cols h3 { margin-bottom: 14px; }
+.after__cols p { color: var(--ink-3); max-width: 52ch; }
+.urgency-demo { display: flex; align-items: stretch; gap: 0; margin-top: 18px; max-width: 520px; }
+.urgency-demo__score {
+  --cut: 18px; flex: none; display: grid; place-items: center; width: 150px; padding: 14px 0;
+  background: var(--red); color: var(--paper);
+  font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: 4rem; line-height: 0.9;
+  clip-path: polygon(var(--cut) 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
+}
+.urgency-demo__why { background: var(--paper); padding: 16px 20px 16px 30px; margin-left: -18px; font-size: 0.9375rem; line-height: 1.45; clip-path: polygon(18px 0, 100% 0, 100% 100%, 0 100%); }
+.urgency-demo__why b { display: block; font-size: 0.8125rem; color: var(--red-text); }
+.privacy { background: var(--ink); color: var(--paper); padding: 32px 36px; --cut: 28px; padding-left: 52px; }
+.privacy .i { width: 32px; height: 32px; color: var(--orange); margin-bottom: 14px; }
+.privacy p { color: #d7d7d0; margin: 0; }
+@media (max-width: 800px) { .after__cols { grid-template-columns: 1fr; } }
+
+/* FAQ */
+.faq { display: grid; grid-template-columns: 4fr 7fr; gap: clamp(24px, 4vw, 72px); }
+.faq__list { border-top: 3px solid var(--ink); }
+.faq details { border-bottom: 1px solid var(--concrete-2); }
+.faq summary {
+  list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  padding: 22px 0; font-family: var(--display); font-style: oblique var(--slant); font-weight: 800; font-size: 1.25rem; line-height: 1.2;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary .i { transition: transform 0.3s var(--ease-out); flex: none; }
+.faq details[open] summary .i { transform: rotate(45deg); }
+.faq summary:hover { color: var(--ink-3); }
+.faq details p { margin: -6px 0 24px; max-width: 60ch; color: var(--ink-3); }
+@media (max-width: 800px) { .faq { grid-template-columns: 1fr; } }
+
+/* Close */
+.close { position: relative; overflow: hidden; padding-block: 0 clamp(56px, 8vw, 104px); }
+.close__plane { --cut: clamp(48px, 8vw, 140px); padding: clamp(48px, 7vw, 96px) var(--gutter); }
+.close__in { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: end; padding-inline: calc(var(--gutter) + 40px); }
+.close .display { font-size: clamp(2.75rem, 1rem + 5vw, 5.75rem); }
+.close__actions { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.close__actions p { margin: 6px 0 0; font-size: 0.9375rem; }
+@media (max-width: 860px) { .close__in { grid-template-columns: 1fr; padding-inline: 16px; } .close__plane { --cut: 32px; } }
+/* телефон: кнопки во всю ширину и с переносом, как в шапке, — длинная «Анкетаны өзім толтырамын» не вылезает за край */
+@media (max-width: 520px) {
+  .close__actions { align-items: stretch; }
+  .close__actions .btn { width: 100%; min-height: 56px; white-space: normal; text-align: left; justify-content: flex-start; padding-inline: 30px; }
+}
+
+
+/* узкий телефон: логотип, RU/KZ и «Личный кабинет» помещаются в одну строку */
+@media (max-width: 440px) {
+  .site-header .header-actions { gap: 8px; }
+  .site-header .header-actions .btn.keep { padding-inline: 16px; --cut: 8px; font-size: 0.875rem; }
+  .site-header .header-actions .btn.keep .i { display: none; }
+  .site-header .lang button { min-width: 38px; padding: 0 8px; }
+}
+
+/* «Путь 1 / Путь 2» над карточками способов: номер в косой плашке и короткая подпись */
+.way__path { margin: 0 0 -4px; display: flex; align-items: center; gap: 12px; }
+.way__num {
+  flex: none; width: 52px; height: 52px; display: grid; place-items: center;
+  font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: 1.75rem; line-height: 1;
+  clip-path: polygon(9px 0, 100% 0, calc(100% - 9px) 100%, 0 100%);
+}
+.way__path > span:last-child { display: grid; gap: 2px; font-size: 0.875rem; line-height: 1.3; }
+.way__path b { font-family: var(--display); font-style: oblique var(--slant); font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.02em; }
+.way--talk .way__num { background: var(--orange); color: var(--ink); }
+.way--talk .way__path > span:last-child { color: #d7d7d0; }
+.way--talk .way__path b { color: var(--orange); }
+.way--self .way__num { background: var(--ink); color: var(--paper); }
+.way--self .way__path > span:last-child { color: var(--ink-3); }
+.way p.way__path { max-width: none; }
+
+/* шапка открытых страниц: разделы одни и те же; на узком экране они уходят в «Меню» (оно работает и без входа) */
+.site-header--site .tburger { display: none; }
+@media (max-width: 1180px) {
+  .site-header--site .nav { display: none; }
+  .site-header--site .tburger { display: inline-flex; background: var(--ink); color: var(--paper); }
+  .site-header--site .tburger:hover { background: var(--orange); color: var(--ink); }
+}
+@media (max-width: 600px) {
+  .site-header--site .header-actions .site-cabinet { display: none; } /* на телефоне кабинет — первая строка меню */
+  .site-header--site .header-actions { gap: 8px; }
+}
+/* после входа справа ещё кнопка кабинета — меню уходит в «Меню» чуть раньше, чтобы шапка не вылезала за край */
+@media (min-width: 1181px) and (max-width: 1239px) {
+  .site-header--site:has(.site-cabinet.btn--orange) .nav { display: none; }
+  .site-header--site:has(.site-cabinet.btn--orange) .tburger { display: inline-flex; background: var(--ink); color: var(--paper); }
+  .site-header--site:has(.site-cabinet.btn--orange) .tburger:hover { background: var(--orange); color: var(--ink); }
+}
+.tmenu__me--guest i .i { width: 22px; height: 22px; }
+
+/* телефон: крупные блоки — ровные прямоугольники на всю ширину, без косого края, который «сужает» блок книзу */
+@media (max-width: 700px) {
+  .way.plane, .ways__mix.plane, .privacy.plane, .close__plane.plane, .twin__photo.plane, .twin__ai.plane, .shot__img.plane { clip-path: none; }
+  .way--talk, .way--self { padding: 28px 22px 30px; }
+  .ways__mix { padding: 22px; }
+  .privacy { padding: 28px 22px; }
+  .close__plane { --cut: 0px; }
+}
