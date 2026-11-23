@@ -314,13 +314,14 @@ function useSwap<T>(key: string, value: T, ms: number) {
   return items;
 }
 
-/** Слово за банкой: буквы выезжают снизу по очереди (как в референсе), при смене — уезжают вверх. */
+/**
+ * Слово за банкой: строка выезжает снизу целиком (вторая — чуть позже), при смене — уезжает вверх.
+ * Целой строкой, а не по буквам: ровно на любом телефоне и в разы меньше работы браузеру.
+ */
 function Word({ text, line }: { text: string; line: number }) {
   return (
-    <span className={`v3__line v3__line--${line}`} aria-hidden="false">
-      {[...text.toUpperCase()].map((ch, k) => (
-        <span key={k} className="v3__ch" style={{ ["--d" as string]: `${line * 60 + k * 30}ms` }}>{ch}</span>
-      ))}
+    <span className={`v3__line v3__line--${line}`}>
+      <span className="v3__in" style={{ ["--d" as string]: `${line * 70}ms` }}>{text.toUpperCase()}</span>
     </span>
   );
 }
@@ -420,8 +421,10 @@ function VideoCard({ open, onOpen, onClose }: { open: boolean; onOpen: () => voi
       b.style.transform = st.transform;
       c.style.clipPath = st.clip;
       // убираем окно ровно когда оно село на карточку (конец анимации), таймер — на всякий случай
+      // конец анимации открытия может прийти уже после нажатия «закрыть» — такой не считаем (рано), ждём своё закрытие
+      const t0 = performance.now();
       const done = () => setPhase("closed");
-      const onEnd = (e: TransitionEvent) => e.target === b && e.propertyName === "transform" && done();
+      const onEnd = (e: TransitionEvent) => e.target === b && e.propertyName === "transform" && performance.now() - t0 > MS * 0.8 && done();
       b.addEventListener("transitionend", onEnd);
       const t = setTimeout(done, MS + 300);
       return () => {

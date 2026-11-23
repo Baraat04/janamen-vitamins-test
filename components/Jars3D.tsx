@@ -121,7 +121,10 @@ export function Jars3D({ jars, index, dir, control, className, onReady }: Props)
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const debug = new URLSearchParams(location.search).has("debug");
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // телефон (палец, узкий экран): рисуем в 1.5× — глазом не отличить от 3×, а работы в 4 раза меньше
+    const mobile = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 900;
+    let ratio = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2);
+    renderer.setPixelRatio(ratio);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -151,7 +154,9 @@ export function Jars3D({ jars, index, dir, control, className, onReady }: Props)
 
     const glassMat = new THREE.MeshPhysicalMaterial({
       color: 0x1a0902, roughness: 0.04, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.03,
-      specularIntensity: 1, ior: 1.5, sheen: 0.25, sheenColor: new THREE.Color(0x8a3a0c), sheenRoughness: 0.45,
+      specularIntensity: 1, ior: 1.5,
+      // мягкий тёплый отлив стекла — дорогой эффект, на телефонах без него
+      ...(mobile ? {} : { sheen: 0.25, sheenColor: new THREE.Color(0x8a3a0c), sheenRoughness: 0.45 }),
     });
     const gold = new THREE.MeshStandardMaterial({ color: 0xd6b25e, metalness: 1, roughness: 0.3 });
     const goldTop = new THREE.MeshStandardMaterial({ color: 0xcfae62, metalness: 1, roughness: 0.38 });
@@ -251,9 +256,29 @@ export function Jars3D({ jars, index, dir, control, className, onReady }: Props)
     io.observe(el);
 
     let raf = 0;
+    // автоподстройка: средняя длительность кадра за ~1.5 с; медленно — снижаем разрешение (не ниже 1×), обратно не повышаем
+    // первые 2.5 с не считаем (браузер готовит 3D — кадры медленные у всех), снижаем после двух медленных отрезков подряд
+    let perfT = 0, perfN = 0, last = 0, slow = 0;
+    const warmUntil = performance.now() + 2500;
+    const adapt = (now: number) => {
+      if (now < warmUntil) return void (last = now);
+      if (last) { perfT += Math.min(100, now - last); perfN++; }
+      last = now;
+      if (perfN < 90) return;
+      const avg = perfT / perfN;
+      perfT = perfN = 0;
+      slow = avg > 25 ? slow + 1 : 0;
+      if (slow >= 2 && ratio > 1) {
+        slow = 0;
+        ratio = Math.max(1, ratio - 0.25);
+        renderer.setPixelRatio(ratio);
+        resize();
+      }
+    };
     const tick = (now: number) => {
       raf = requestAnimationFrame(tick);
-      if (!visible) return;
+      if (!visible || document.hidden) return void (last = 0);
+      adapt(now);
       const time = now / 1000;
       sx += (px - sx) * 0.05;
       sy += (py - sy) * 0.05;
@@ -296,7 +321,7 @@ export function Jars3D({ jars, index, dir, control, className, onReady }: Props)
         if (g.visible) place(g, poses[i]);
       });
       // ?debug — для автотестов плавности: позы банок и граница кадра
-      if (debug) (window as unknown as { __v3?: unknown }).__v3 = { t: now, cur, edge: edge() - 2.2, poses: poses.map((p, i) => ({ i, on: seen.has(i), ...p })) };
+      if (debug) (window as unknown as { __v3?: unknown }).__v3 = { t: now, cur, edge: edge() - 2.2, poses: poses.map((p, i) => ({ i, on: seen.has(i), ...p })), ratio };
       renderer.render(scene, camera);
     };
     raf = requestAnimationFrame(tick);

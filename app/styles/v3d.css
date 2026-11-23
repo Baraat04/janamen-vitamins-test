@@ -28,13 +28,17 @@
 /* старые и новые слова лежат в одной клетке: старые уезжают вверх, новые выезжают снизу */
 .v3__set { grid-area: 1 / 1; display: grid; justify-items: center; position: relative; }
 /* строка обрезает буквы только при выезде; запас сверху и снизу — под верх заглавных и хвосты Ц Д Щ (и Й Ё) */
-.v3__line { display: block; overflow: hidden; padding: 0.2em 0.06em 0.13em; margin: -0.2em 0 -0.13em; }
-.v3__ch { display: inline-block; animation: v3-in 0.75s var(--ease-out) calc(var(--d, 0ms) + var(--wait, 0ms)) both; will-change: transform; }
+/* строка ровно 0.82em высотой — шаг между строками одинаковый в любом браузере (раньше держался на паддинге
+   с отрицательными полями, и на части телефонов строки разъезжались). Буквы выше и ниже строки не режем:
+   clip-path с запасом под верх заглавных и хвосты Ц Д Щ — он же прячет строку, пока она внизу или ушла вверх */
+.v3__line { display: block; height: 0.82em; line-height: 0.82; white-space: nowrap; clip-path: inset(-0.24em -0.12em -0.16em -0.12em); }
+.v3__in { display: block; height: 0.82em; animation: v3-in 0.8s var(--ease-out) calc(var(--d, 0ms) + var(--wait, 0ms)) both; }
 /* при смене новые буквы ждут, пока старые уедут */
 .v3__words.is-swapping .v3__set:not(.is-out) { --wait: 330ms; }
-.v3__set.is-out .v3__ch { animation: v3-out 0.36s cubic-bezier(0.55, 0, 0.8, 0.25) calc(var(--d, 0ms) * 0.6) forwards; }
-@keyframes v3-in { from { transform: translateY(135%); } to { transform: none; } }
-@keyframes v3-out { from { transform: none; } to { transform: translateY(-140%); } }
+.v3__set.is-out .v3__in { animation: v3-out 0.38s cubic-bezier(0.55, 0, 0.8, 0.25) calc(var(--d, 0ms) * 0.5) forwards; }
+/* 140% строки — буквы целиком ниже/выше области clip-path, поэтому появляются и исчезают «из-под края» */
+@keyframes v3-in { from { transform: translate3d(0, 140%, 0); } to { transform: translate3d(0, 0, 0); } }
+@keyframes v3-out { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(0, -150%, 0); } }
 
 /* кольцо «от руки» — привязано к словам: стоит над правым концом верхнего слова и чуть выходит вправо,
    поэтому оранжевая надпись всегда на тёмном фоне, а не поверх белых букв (bottom в em — от размера слов) */
@@ -151,7 +155,7 @@
   .v3v__x { top: 8px; right: 8px; width: 42px; height: 42px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .v3__ch, .v3__set.is-out .v3__ch, .v3__lead, .v3__name, .v3__ring span { animation: none; }
+  .v3__in, .v3__set.is-out .v3__in, .v3__lead, .v3__name, .v3__ring span { animation: none; }
   .v3__set.is-out, .v3__lead.is-out, .v3__name.is-out { display: none; }
   .v3__ring path { animation: none; stroke-dashoffset: 0; }
 }
